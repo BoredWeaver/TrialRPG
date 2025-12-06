@@ -1,0 +1,50 @@
+{
+  "central-shop": {
+    "sellMultiplier": 0.5,
+    "stock": {
+      "potion": { "price": 25, "qty": 999 },
+      "bomb": { "price": 45, "qty": 20 },
+      "iron-sword": { "price": 120, "qty": 6 },
+      "wooden-shield": { "price": 60, "qty": 8 },
+      "leather-helmet": { "price": 40, "qty": 10 },
+      "leather-armor": { "price": 150, "qty": 4 },
+      "leather-boots": { "price": 35, "qty": 12 }
+    }
+  },
+
+  "sky-shop": {
+    "sellMultiplier": 0.5,
+    "stock": {
+      "potion": { "price": 30, "qty": 999 },
+      "brass-ring": { "price": 90, "qty": 5 },
+      "assassin-ring": { "price": 220, "qty": 2 }
+    }
+  },
+
+  "ice-shop": {
+    "sellMultiplier": 0.5,
+    "stock": {
+      "potion": { "price": 28, "qty": 999 },
+      "mana_leaf": { "price": 80, "qty": 10 },
+      "frost_core": { "price": 250, "qty": 3 }
+    }
+  },
+
+  "fire-shop": {
+    "sellMultiplier": 0.5,
+    "stock": {
+      "potion": { "price": 35, "qty": 999 },
+      "ember_fragment": { "price": 180, "qty": 6 },
+      "keen-dagger": { "price": 140, "qty": 4 }
+    }
+  },
+
+  "ocean-shop": {
+    "sellMultiplier": 0.5,
+    "stock": {
+      "potion": { "price": 26, "qty": 999 },
+      "slime_gel": { "price": 40, "qty": 12 },
+      "serpent_scale": { "price": 260, "qty": 2 }
+    }
+  }
+}

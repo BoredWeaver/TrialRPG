@@ -1,0 +1,41 @@
+{
+  "kill_goblins_2": {
+    "id": "kill_goblins_2",
+    "title": "Clearing the Meadow",
+    "desc": "The goblins have been harassing travellers. Kill 5 Goblins.",
+    "type": "kill",
+    "target": { "enemyId": "goblin", "qty": 5 },
+    "rewards": { "gold": 80, "exp": 60, "items": [{ "id": "potion", "qty": 1 }] },
+    "minLevel": 1
+  },
+
+  "collect_slime_gel_1": {
+    "id": "collect_slime_gel_1",
+    "title": "Slime Harvest",
+    "desc": "Gather 3 Slime Gel from defeated Slimes.",
+    "type": "collect",
+    "target": { "itemId": "slime_gel", "qty": 3 },
+    "rewards": { "gold": 40, "exp": 30 },
+    "minLevel": 1
+  },
+
+  "visit_outpost": {
+    "id": "visit_outpost",
+    "title": "Scout the Ruins",
+    "desc": "Travel to the Ruined Outpost and report back.",
+    "type": "visit",
+    "target": { "locationId": "central-zone-3" },
+    "rewards": { "gold": 50, "exp": 40 },
+    "minLevel": 2
+  },
+
+  "deliver_letter": {
+    "id": "deliver_letter",
+    "title": "Messenger Duty",
+    "desc": "Take this letter from Central City to Skyfall City.",
+    "type": "travel",
+    "target": { "from": "central-city", "to": "sky-city" },
+    "rewards": { "gold": 120, "exp": 80 },
+    "minLevel": 3
+  }
+}

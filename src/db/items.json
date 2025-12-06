@@ -1,0 +1,190 @@
+{
+  "bomb": {
+    "id": "bomb",
+    "name": "Bomb",
+    "kind": "damage",
+    "damage": 8,
+    "canCrit": false,
+    "description": "Deal 8 damage (ignores DEF).",
+    "price": 12
+  },
+  "iron-sword": {
+    "id": "iron-sword",
+    "name": "Iron Sword",
+    "kind": "equipment",
+    "slot": "weapon",
+    "description": "A basic iron sword. +3 ATK, slightly sharper (+10% crit dmg).",
+    "bonus": {
+      "atk": 3,
+      "stats": {
+        "CRITDMG": 10
+      }
+    },
+    "price": 48
+  },
+  "wooden-shield": {
+    "id": "wooden-shield",
+    "name": "Wooden Shield",
+    "kind": "equipment",
+    "slot": "offhand",
+    "description": "Simple wooden shield. +1 DEF",
+    "bonus": {
+      "def": 1
+    },
+    "price": 18
+  },
+  "leather-helmet": {
+    "id": "leather-helmet",
+    "name": "Leather Helmet",
+    "kind": "equipment",
+    "slot": "head",
+    "description": "Light helmet. +2 MaxHP",
+    "bonus": {
+      "maxHP": 2
+    },
+    "price": 14
+  },
+  "leather-armor": {
+    "id": "leather-armor",
+    "name": "Leather Armor",
+    "kind": "equipment",
+    "slot": "torso",
+    "description": "Basic torso armor. +2 DEF, +6 MaxHP",
+    "bonus": {
+      "def": 2,
+      "maxHP": 6
+    },
+    "price": 36
+  },
+  "leather-boots": {
+    "id": "leather-boots",
+    "name": "Leather Boots",
+    "kind": "equipment",
+    "slot": "boots",
+    "description": "Light boots. +1 DEX",
+    "bonus": {
+      "stats": {
+        "DEX": 1
+      }
+    },
+    "price": 12
+  },
+  "brass-ring": {
+    "id": "brass-ring",
+    "name": "Brass Ring",
+    "kind": "equipment",
+    "slot": "accessory",
+    "description": "A simple ring. +1 M-ATK, modest crit chance (+5%).",
+    "bonus": {
+      "mAtk": 1,
+      "stats": {
+        "CRIT": 5
+      }
+    },
+    "price": 28
+  },
+  "assassin-ring": {
+    "id": "assassin-ring",
+    "name": "Assassin's Ring",
+    "kind": "equipment",
+    "slot": "accessory",
+    "description": "Slim ring favored by cutters. +8% crit chance.",
+    "bonus": {
+      "stats": {
+        "CRIT": 8
+      }
+    },
+    "price": 42
+  },
+  "keen-dagger": {
+    "id": "keen-dagger",
+    "name": "Keen Dagger",
+    "kind": "equipment",
+    "slot": "weapon",
+    "description": "A light dagger with a keen edge. +1 ATK, +15% crit damage.",
+    "bonus": {
+      "atk": 1,
+      "stats": {
+        "CRITDMG": 15
+      }
+    },
+    "price": 30
+  },
+  "slime_gel": {
+    "id": "slime_gel",
+    "name": "Slime Gel",
+    "kind": "material",
+    "description": "Sticky remains of a defeated Slime.",
+    "price": 2
+  },
+  "wolf_pelt": {
+    "id": "wolf_pelt",
+    "name": "Wolf Pelt",
+    "kind": "material",
+    "description": "Warm pelt from a slain Wolf.",
+    "price": 4
+  },
+  "bat_wing": {
+    "id": "bat_wing",
+    "name": "Bat Wing",
+    "kind": "material",
+    "description": "A thin, leathery wing from a Cave Bat.",
+    "price": 3
+  },
+  "orc_tooth": {
+    "id": "orc_tooth",
+    "name": "Orc Tooth",
+    "kind": "material",
+    "description": "A chipped tooth ripped from a defeated Orc.",
+    "price": 5
+  },
+  "bone_shard": {
+    "id": "bone_shard",
+    "name": "Bone Shard",
+    "kind": "material",
+    "description": "Splintered bone fragment dropped by Skeletons.",
+    "price": 2
+  },
+  "mana_leaf": {
+    "id": "mana_leaf",
+    "name": "Mana Leaf",
+    "kind": "material",
+    "description": "A faintly glowing herb carried by skeletal mages.",
+    "price": 6
+  },
+  "troll_hide": {
+    "id": "troll_hide",
+    "name": "Troll Hide",
+    "kind": "material",
+    "description": "Thick, coarse hide from a Troll — used in heavy armor crafting and rugged gear.",
+    "price": 10
+  },
+  "ectoplasm": {
+    "id": "ectoplasm",
+    "name": "Ectoplasm",
+    "kind": "material",
+    "description": "Gelatinous remnants of a Specter. Useful for arcane reagents and ghostly charms.",
+    "price": 8
+  },
+  "frost_core": {
+    "id": "frost_core",
+    "name": "Frost Core",
+    "kind": "material",
+    "description": "A condensed shard of winter spirit energy. Component for ice magics and cold-forged items.",
+    "price": 18
+  },
+  "ember_fragment": {
+    "id": "ember_fragment",
+    "name": "Ember Fragment",
+    "kind": "material",
+    "description": "A still-warm ember from a Fire Imp. Used in fire-infused crafting and basic pyromancies.",
+    "price": 9
+  },
+  "serpent_scale": {
+    "id": "serpent_scale",
+    "name": "Serpent Scale",
+    "kind": "material",
+    "description": "A glossy scale from a Sea Serpent. Valued for water-resistant gear and certain alchemical brews.",
+    "price": 12
+  }
+}

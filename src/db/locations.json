@@ -1,0 +1,278 @@
+{
+  "regions": [
+    {
+      "id": "central",
+      "name": "Central Region",
+      "locations": [
+        {
+          "id": "central-city",
+          "name": "Central City",
+          "type": "city",
+          "kind": "hub"
+        },
+        {
+          "id": "central-shop",
+          "name": "Central Market",
+          "type": "shop",
+          "shopId": "central-shop"
+        },
+        {
+          "id": "central-zone-1",
+          "name": "Meadow Border (Intro)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 1,
+          "enemies": ["goblin", "slime", "wolf"],
+          "dungeons": ["goblin-den"]
+        },
+        {
+          "id": "central-zone-2",
+          "name": "Old Farmlands (Mid)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 2,
+          "enemies": ["bandit", "wolf", "slime"],
+          "dungeons": ["goblin-den", "slime-pond"]
+        },
+        {
+          "id": "central-zone-3",
+          "name": "Ruined Outpost (Challenge)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 4,
+          "enemies": ["orc", "bandit", "wolf"],
+          "dungeons": ["howling-woods", "goblin-den"]
+        },
+        {
+          "id": "central-zone-4",
+          "name": "Outpost Boss (Boss)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 6,
+          "enemies": ["orc", "troll"],
+          "dungeons": ["howling-woods"]
+        }
+      ]
+    },
+
+    {
+      "id": "sky",
+      "name": "Sky Region",
+      "locations": [
+        {
+          "id": "sky-city",
+          "name": "Skyfall City",
+          "type": "city",
+          "kind": "hub"
+        },
+        {
+          "id": "sky-shop",
+          "name": "Skyfall Market",
+          "type": "shop",
+          "shopId": "sky-shop"
+        },
+        {
+          "id": "sky-zone-1",
+          "name": "Cliffside Path (Intro)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 3,
+          "enemies": ["bandit", "goblin"],
+          "dungeons": ["howling-woods"]
+        },
+        {
+          "id": "sky-zone-2",
+          "name": "Cloudridge (Mid)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 5,
+          "enemies": ["ice-spirit", "goblin"],
+          "dungeons": ["frozen-grotto"]
+        },
+        {
+          "id": "sky-zone-3",
+          "name": "Windbreaker Ruins (Challenge)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 7,
+          "enemies": ["ice-spirit", "specter"],
+          "dungeons": ["frozen-grotto", "haunted-crypt"]
+        },
+        {
+          "id": "sky-zone-4",
+          "name": "Skywarden (Boss)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 9,
+          "enemies": ["specter", "troll"],
+          "dungeons": ["haunted-crypt"]
+        }
+      ]
+    },
+
+    {
+      "id": "ice",
+      "name": "Ice Region",
+      "locations": [
+        {
+          "id": "ice-city",
+          "name": "Frosthelm",
+          "type": "city",
+          "kind": "hub"
+        },
+        {
+          "id": "ice-shop",
+          "name": "Frosthelm Bazaar",
+          "type": "shop",
+          "shopId": "ice-shop"
+        },
+        {
+          "id": "ice-zone-1",
+          "name": "Frostwood (Intro)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 4,
+          "enemies": ["ice-spirit", "slime"],
+          "dungeons": ["frozen-grotto"]
+        },
+        {
+          "id": "ice-zone-2",
+          "name": "Frozen Caverns (Mid)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 6,
+          "enemies": ["ice-spirit", "skeleton"],
+          "dungeons": ["frozen-grotto", "haunted-crypt"]
+        },
+        {
+          "id": "ice-zone-3",
+          "name": "Shattered Glacier (Challenge)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 8,
+          "enemies": ["skeleton", "troll"],
+          "dungeons": ["frozen-grotto"]
+        },
+        {
+          "id": "ice-zone-4",
+          "name": "Glacial Warden (Boss)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 10,
+          "enemies": ["troll", "specter"],
+          "dungeons": ["frozen-grotto"]
+        }
+      ]
+    },
+
+    {
+      "id": "fire",
+      "name": "Fire Region",
+      "locations": [
+        {
+          "id": "fire-city",
+          "name": "Emberhold",
+          "type": "city",
+          "kind": "hub"
+        },
+        {
+          "id": "fire-shop",
+          "name": "Ember Market",
+          "type": "shop",
+          "shopId": "fire-shop"
+        },
+        {
+          "id": "fire-zone-1",
+          "name": "Scorched Flats (Intro)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 5,
+          "enemies": ["fire-imp", "goblin"],
+          "dungeons": ["fire-embers"]
+        },
+        {
+          "id": "fire-zone-2",
+          "name": "Ashen Pass (Mid)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 7,
+          "enemies": ["fire-imp", "orc"],
+          "dungeons": ["fire-embers"]
+        },
+        {
+          "id": "fire-zone-3",
+          "name": "Magma Halls (Challenge)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 9,
+          "enemies": ["orc", "troll"],
+          "dungeons": ["fire-embers", "howling-woods"]
+        },
+        {
+          "id": "fire-zone-4",
+          "name": "Flame Sovereign (Boss)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 12,
+          "enemies": ["troll", "fire-imp"],
+          "dungeons": ["fire-embers"]
+        }
+      ]
+    },
+
+    {
+      "id": "ocean",
+      "name": "Ocean Region",
+      "locations": [
+        {
+          "id": "ocean-city",
+          "name": "Marisport",
+          "type": "city",
+          "kind": "hub"
+        },
+        {
+          "id": "ocean-shop",
+          "name": "Marisport Tradehouse",
+          "type": "shop",
+          "shopId": "ocean-shop"
+        },
+        {
+          "id": "ocean-zone-1",
+          "name": "Tide Flats (Intro)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 2,
+          "enemies": ["slime", "sea-serpent"],
+          "dungeons": ["slime-pond"]
+        },
+        {
+          "id": "ocean-zone-2",
+          "name": "Brine Shoals (Mid)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 4,
+          "enemies": ["sea-serpent", "bandit"],
+          "dungeons": ["slime-pond"]
+        },
+        {
+          "id": "ocean-zone-3",
+          "name": "Sunken Grotto (Challenge)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 7,
+          "enemies": ["sea-serpent", "specter"],
+          "dungeons": ["slime-pond", "haunted-crypt"]
+        },
+        {
+          "id": "ocean-zone-4",
+          "name": "Leviathan Depths (Boss)",
+          "type": "zone",
+          "kind": "zone",
+          "minLevel": 11,
+          "enemies": ["sea-serpent", "troll"],
+          "dungeons": ["slime-pond"]
+        }
+      ]
+    }
+  ]
+}

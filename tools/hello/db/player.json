@@ -1,0 +1,10 @@
+{
+  "name": "Knight",
+  "level": 1,
+  "gold": 100,
+  "exp": 0,
+  "unspentPoints": 0,
+  "stats": { "STR": 3, "DEX": 3, "MAG": 3, "CON": 3 },
+  "spellbook": ["firebolt", "heal", "ice-spike"],
+  "inventory": { "potion": 2, "ether": 1, "bomb": 1 }
+}
