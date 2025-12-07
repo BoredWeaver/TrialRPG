@@ -219,5 +219,72 @@
     },
     "drops": [{ "id": "serpent_scale", "qty": 1 }],
     "spells": ["water-bolt", "ice-spike", "poison-cloud"]
+  },
+
+  "goblin-king": {
+    "name": "Goblin King",
+    "maxHP": 480,
+    "atk": 18,
+    "mAtk": 6,
+    "def": 5,
+    "mDef": 3,
+    "expReward": 4200,
+    "element": "physical",
+    "elementMods": {
+      "fire": 1.0,
+      "ice": 0.9
+    },
+    "drops": [
+      { "id": "king_crown", "qty": 1 },
+      { "id": "potion", "qty": 2 }
+    ],
+    "spells": ["war-cry","multi-shot"],
+    "boss": true,
+    "notes": "High HP boss — moderate single-target damage, summons minions occasionally."
+  },
+
+  "stone-golem": {
+    "name": "Stone Golem",
+    "maxHP": 1200,
+    "atk": 28,
+    "mAtk": 0,
+    "def": 12,
+    "mDef": 8,
+    "expReward": 9000,
+    "element": "earth",
+    "elementMods": {
+      "fire": 0.9,
+      "lightning": 1.1
+    },
+    "drops": [
+      { "id": "golem_core", "qty": 1 },
+      { "id": "stone_fragment", "qty": 3 }
+    ],
+    "spells": ["smash","ground-slam"],
+    "boss": true,
+    "notes": "Very high HP and heavy defense; damage is normal for its tier but hits hard if not mitigated."
+  },
+
+  "kraken": {
+    "name": "The Kraken",
+    "maxHP": 950,
+    "atk": 22,
+    "mAtk": 16,
+    "def": 6,
+    "mDef": 6,
+    "expReward": 8200,
+    "element": "water",
+    "elementMods": {
+      "fire": 1.6,
+      "ice": 0.8,
+      "lightning": 1.4
+    },
+    "drops": [
+      { "id": "kraken_tentacle", "qty": 1 },
+      { "id": "serpent_scale", "qty": 3 }
+    ],
+    "spells": ["tide-crush","ink-cloud"],
+    "boss": true,
+    "notes": "High HP, normal damage; has an AOE tentacle slam and an ink cloud that reduces player accuracy."
   }
 }

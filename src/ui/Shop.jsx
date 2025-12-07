@@ -6,17 +6,23 @@ import { getLocationsForRegion, getCityForRegion } from "../state/locations.js";
 import { getShopStock, buyFromShop, sellToShop, getShop } from "../state/shop.js";
 import itemsCatalog from "../db/items.json";
 
+/**
+ * Shop — presentation-only rewrite
+ * - Dark fantasy theme to match City/CharacterSheet
+ * - Mobile-first responsive layout (1 col -> 2 col)
+ * - Keeps existing logic/handlers unchanged
+ */
+
 export default function Shop({ shopId: propShopId = null }) {
   const { shopId: paramShopId } = useParams();
   const { progress } = usePlayerProgress();
   const navigate = useNavigate();
+
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState(null);
   const msgTimerRef = useRef(null);
-  // refreshKey forces recompute of memoized derived data after buy/sell
   const [refreshKey, setRefreshKey] = useState(0);
 
-  // Resolve shopId (priority: prop -> param -> current region's shop)
   const resolvedShopId = useMemo(() => {
     if (propShopId) return propShopId;
     if (paramShopId) return decodeURIComponent(paramShopId);
@@ -27,7 +33,6 @@ export default function Shop({ shopId: propShopId = null }) {
     return shop ? shop.id : null;
   }, [propShopId, paramShopId, progress?.currentRegion]);
 
-  // Load shop descriptor and stock
   const shop = useMemo(() => {
     if (!resolvedShopId) return null;
     try {
@@ -38,8 +43,6 @@ export default function Shop({ shopId: propShopId = null }) {
     }
   }, [resolvedShopId]);
 
-  // Recompute stock whenever resolvedShopId OR game progress changes OR refreshKey changes.
-  // This prevents stale UI after buy/sell or other systems modify shop state.
   const stock = useMemo(() => {
     if (!resolvedShopId) return [];
     try {
@@ -48,9 +51,8 @@ export default function Shop({ shopId: propShopId = null }) {
       console.error("getShopStock error", e);
       return [];
     }
-  }, [resolvedShopId, progress, refreshKey]); // include refreshKey so handleBuy/handleSell can force update
+  }, [resolvedShopId, progress, refreshKey]);
 
-  // Build a filtered inventory list (exclude zero qty entries)
   const playerInvList = useMemo(() => {
     const inv = (progress && (progress.inventory || progress.items)) ? { ...(progress.inventory || progress.items) } : {};
     return Object.entries(inv)
@@ -59,7 +61,6 @@ export default function Shop({ shopId: propShopId = null }) {
       .sort((a, b) => String(itemsCatalog[a.id]?.name || a.id).localeCompare(String(itemsCatalog[b.id]?.name || b.id)));
   }, [progress, refreshKey]);
 
-  // Build quick lookup for whether shop accepts an item (and stock)
   const shopAcceptInfo = useMemo(() => {
     const accepts = new Set();
     const stockMap = new Map();
@@ -71,14 +72,12 @@ export default function Shop({ shopId: propShopId = null }) {
     return { accepts, buyAll, stockMap };
   }, [stock, shop]);
 
-  // whether item is currently equipped in player's progress
   const isItemEquipped = (itemId) => {
     if (!progress) return false;
     const eq = progress.equipped || {};
     return Object.values(eq).some((v) => v === itemId);
   };
 
-  // Message helper (clears previous timer)
   function showMsg(text, timeout = 2500) {
     setMessage(text);
     if (msgTimerRef.current) {
@@ -112,9 +111,7 @@ export default function Shop({ shopId: propShopId = null }) {
         showMsg("Buy failed: " + (res?.reason || "unknown"));
       } else {
         showMsg(`Bought ${qty} × ${itemsCatalog[itemId]?.name || itemId}`);
-        // log returned merged progress for debugging
         console.log("[Shop] buy result.progress:", res.progress);
-        // force UI recompute to reflect latest persisted state
         setRefreshKey(k => k + 1);
       }
     } catch (e) {
@@ -141,7 +138,6 @@ export default function Shop({ shopId: propShopId = null }) {
       } else {
         showMsg(`Sold ${qty} × ${itemsCatalog[itemId]?.name || itemId} (+${res.goldGained || 0} gold)`);
         console.log("[Shop] sell result.progress:", res.progress);
-        // force UI recompute to reflect latest persisted state
         setRefreshKey(k => k + 1);
       }
     } catch (e) {
@@ -154,10 +150,10 @@ export default function Shop({ shopId: propShopId = null }) {
 
   if (!resolvedShopId) {
     return (
-      <div style={styles.root}>
-        <h3 style={{ marginTop: 0 }}>Shop not found</h3>
-        <div style={{ marginTop: 8 }}>
-          <button style={styles.btn} onClick={() => navigate(-1)}>Back</button>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-gray-100 mt-0">Shop not found</h3>
+        <div className="mt-2">
+          <button className="px-3 py-2 rounded-md bg-[#0f141a] border border-[#1c232c] text-gray-100" onClick={() => navigate(-1)}>Back</button>
         </div>
       </div>
     );
@@ -166,56 +162,72 @@ export default function Shop({ shopId: propShopId = null }) {
   const cityName = getCityForRegion(progress?.currentRegion || "")?.name || "";
 
   return (
-    <div style={styles.root}>
-      <div style={styles.header}>
+    <div className="p-4 min-h-screen bg-transparent text-gray-100">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 style={{ margin: 0 }}>{resolvedShopId}</h2>
-          <div style={{ color: "#666", marginTop: 6 }}>{cityName}</div>
+          <h2 className="text-lg font-semibold">{resolvedShopId}</h2>
+          <div className="text-xs text-gray-400 mt-1">{cityName}</div>
         </div>
 
-        <div style={{ display: "flex", gap: 8 }}>
-          <button style={styles.btn} onClick={() => navigate(-1)}>Back</button>
-          <button style={styles.btnAlt} onClick={() => navigate("/")}>City</button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate(-1)}
+            className="px-3 py-1 rounded-md bg-[#0f141a] border border-[#1c232c] text-sm text-gray-100"
+          >
+            Back
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="px-3 py-1 rounded-md bg-transparent border border-[#1c232c] text-sm text-gray-100"
+          >
+            City
+          </button>
         </div>
       </div>
 
-      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 320px", gap: 16 }}>
-        {/* Stock list */}
+      {/* Grid: Stock (main) + Inventory (sidebar) */}
+      <div className="mt-4 grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
+        {/* Stock */}
         <div>
-          <div style={{ fontWeight: 700, marginBottom: 8 }}>Stock</div>
+          <div className="mb-3 text-sm font-semibold">Stock</div>
+
           {(!stock || stock.length === 0) ? (
-            <div style={{ color: "#666" }}>This shop has no stock.</div>
+            <div className="text-sm text-gray-400">This shop has no stock.</div>
           ) : (
-            <div style={{ display: "grid", gap: 8 }}>
+            <div className="space-y-3">
               {stock.map((s) => {
                 const meta = itemsCatalog[s.id] || { name: s.id };
                 const inStock = s.inStock === Infinity ? "∞" : String(s.inStock);
                 const playerGold = Number(progress?.gold) || 0;
                 const canAfford = playerGold >= (s.price || 0);
                 const disabled = busy || (!canAfford) || (s.inStock === 0);
+
                 return (
-                  <div key={s.id} style={styles.stockRow}>
-                    <div>
-                      <div style={{ fontWeight: 700 }}>{meta.name}</div>
-                      <div style={{ color: "#666", fontSize: 13 }}>{s.id}</div>
+                  <div key={s.id} className="flex items-center justify-between p-3 rounded-lg bg-[#0b0f14] border border-[#1c232c]">
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{meta.name}</div>
+                      <div className="text-xs text-gray-400 truncate">{s.id}</div>
                     </div>
 
-                    <div style={{ textAlign: "right" }}>
-                      <div style={{ color: "#666", fontSize: 13 }}>Price: {s.price}</div>
-                      <div style={{ color: "#666", fontSize: 12 }}>In stock: {inStock}</div>
-                      <div style={{ marginTop: 8, display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                    <div className="text-right min-w-[140px]">
+                      <div className="text-xs text-gray-400">Price: <span className="font-semibold text-gray-100">{s.price}</span></div>
+                      <div className="text-xs text-gray-400">In stock: {inStock}</div>
+
+                      <div className="mt-2 flex justify-end gap-2">
                         <button
-                          style={{ ...styles.smallBtn, ...(disabled ? styles.smallBtnDisabled : {}) }}
                           onClick={() => !disabled && handleBuy(s.id, 1)}
                           disabled={disabled}
+                          className={`px-2 py-1 rounded text-sm ${disabled ? "bg-[#0f141a] text-gray-500 cursor-not-allowed" : "bg-amber-700 text-amber-100 border border-amber-700"}`}
                           title={disabled ? "Cannot buy" : `Buy 1 ${meta.name}`}
                         >
                           Buy ×1
                         </button>
+
                         <button
-                          style={{ ...styles.smallBtn, ...(disabled ? styles.smallBtnDisabled : {}) }}
                           onClick={() => !disabled && handleBuy(s.id, 5)}
                           disabled={disabled || (s.inStock !== Infinity && s.inStock < 5)}
+                          className={`px-2 py-1 rounded text-sm ${disabled ? "bg-[#0f141a] text-gray-500 cursor-not-allowed" : "bg-[#1a1f27] text-gray-100 border border-[#2c3544]"}`}
                           title={disabled ? "Cannot buy" : `Buy 5 ${meta.name}`}
                         >
                           Buy ×5
@@ -229,13 +241,14 @@ export default function Shop({ shopId: propShopId = null }) {
           )}
         </div>
 
-        {/* Player Inventory / Sell */}
-        <div>
-          <div style={{ fontWeight: 700, marginBottom: 8 }}>Your Inventory</div>
+        {/* Inventory / Sell panel */}
+        <aside>
+          <div className="mb-3 text-sm font-semibold">Your Inventory</div>
+
           {playerInvList.length === 0 ? (
-            <div style={{ color: "#666" }}>You have no items to sell.</div>
+            <div className="text-sm text-gray-400">You have no items to sell.</div>
           ) : (
-            <div style={{ display: "grid", gap: 8 }}>
+            <div className="space-y-3">
               {playerInvList.map((it) => {
                 const meta = itemsCatalog[it.id] || { name: it.id };
                 const qtyN = Number(it.qty) || 0;
@@ -260,33 +273,34 @@ export default function Shop({ shopId: propShopId = null }) {
                         : `Sell to shop`;
 
                 return (
-                  <div key={it.id} style={styles.invRow}>
-                    <div>
-                      <div style={{ fontWeight: 700 }}>{meta.name}</div>
-                      <div style={{ color: "#666", fontSize: 13 }}>{it.id}</div>
+                  <div key={it.id} className="flex items-center justify-between p-3 rounded-lg bg-[#0b0f14] border border-[#1c232c]">
+                    <div className="min-w-0">
+                      <div className="font-medium truncate">{meta.name}</div>
+                      <div className="text-xs text-gray-400 truncate">{it.id}</div>
                     </div>
 
-                    <div style={{ textAlign: "right" }}>
-                      <div style={{ color: "#666", fontSize: 13 }}>
-                        Qty: {qtyN}
-                        {equipped ? <span style={{ marginLeft: 10, color: "#b35", fontSize: 12, fontWeight: 600 }}>Equipped</span> : null}
+                    <div className="text-right min-w-[140px]">
+                      <div className="text-xs text-gray-400">
+                        Qty: <span className="font-semibold text-gray-100">{qtyN}</span>
+                        {equipped ? <span className="ml-2 text-xs font-semibold text-rose-400">Equipped</span> : null}
                       </div>
-                      <div style={{ marginTop: 8, display: "flex", gap: 8, justifyContent: "flex-end", alignItems: "center" }}>
-                        {!canSell && !equipped && <div style={{ fontSize: 12, color: "#999", marginRight: 8 }}>Not buyable</div>}
+
+                      <div className="mt-2 flex justify-end gap-2 items-center">
+                        {!canSell && !equipped && <div className="text-xs text-gray-500 mr-2">Not buyable</div>}
 
                         <button
-                          style={{ ...styles.smallBtn, ...(sellDisabled ? styles.smallBtnDisabled : {}) }}
                           onClick={() => !sellDisabled && handleSell(it.id, 1)}
                           disabled={sellDisabled}
+                          className={`px-2 py-1 rounded text-sm ${sellDisabled ? "bg-[#0f141a] text-gray-500 cursor-not-allowed" : "bg-[#111827] text-gray-100 border border-[#2c3544]"}`}
                           title={sellTitle}
                         >
                           Sell ×1
                         </button>
 
                         <button
-                          style={{ ...styles.smallBtn, ...(sellDisabled ? styles.smallBtnDisabled : {}) }}
                           onClick={() => !sellDisabled && handleSell(it.id, Math.min(5, qtyN))}
                           disabled={sellDisabled}
+                          className={`px-2 py-1 rounded text-sm ${sellDisabled ? "bg-[#0f141a] text-gray-500 cursor-not-allowed" : "bg-[#111827] text-gray-100 border border-[#2c3544]"}`}
                           title={sellTitle}
                         >
                           Sell ×{Math.min(5, qtyN)}
@@ -298,56 +312,17 @@ export default function Shop({ shopId: propShopId = null }) {
               })}
             </div>
           )}
-        </div>
+        </aside>
       </div>
 
-      {message ? (
-        <div style={{ marginTop: 12 }}>
-          <div style={{ padding: 8, background: "#fff", border: "1px solid #eee", borderRadius: 8 }}>{message}</div>
+      {/* Message */}
+      {message && (
+        <div className="mt-4">
+          <div className="inline-block px-3 py-2 rounded-lg bg-[#0d1118] border border-[#1c232c] text-sm text-gray-100">
+            {message}
+          </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
-
-/* ---------------- Styles ---------------- */
-const styles = {
-  root: { padding: 18 },
-  header: { display: "flex", justifyContent: "space-between", alignItems: "center" },
-  btn: { padding: "8px 12px", borderRadius: 8, border: "1px solid #d9d9d9", background: "#fafafa", cursor: "pointer" },
-  btnAlt: { padding: "8px 12px", borderRadius: 8, border: "1px solid #eee", background: "#fff", cursor: "pointer" },
-
-  stockRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 12,
-    border: "1px solid #eee",
-    borderRadius: 8,
-    background: "#fff"
-  },
-
-  invRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 12,
-    border: "1px solid #eee",
-    borderRadius: 8,
-    background: "#fff"
-  },
-
-  smallBtn: {
-    padding: "6px 8px",
-    borderRadius: 6,
-    border: "1px solid #d9d9d9",
-    background: "#fafafa",
-    cursor: "pointer",
-    fontSize: 13
-  },
-
-  smallBtnDisabled: {
-    opacity: 0.5,
-    cursor: "not-allowed"
-  }
-};

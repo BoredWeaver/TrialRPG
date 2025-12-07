@@ -17,7 +17,7 @@ import {
  * - Responsive layout (Tailwind breakpoints)
  * - Truncation / overflow safety
  * - Stacked buttons on mobile, inline on desktop
- * - Accessibility attributes and titles
+ * - Small translucent bg, border and shadow on cards
  *
  * NO logic changes.
  */
@@ -122,9 +122,16 @@ export default function WorldMap() {
                 return (
                   <article
                     key={z.id}
-                    className={`rounded-lg p-4 transition fantasy-border bg-panel-800 flex flex-col justify-between min-h-[140px] ${disabled ? "opacity-60" : "hover:shadow-lg"}`}
+                    className={`rounded-lg p-4 transition-transform duration-150 flex flex-col justify-between min-h-[140px]`}
                     title={z.name}
                     aria-labelledby={`zone-${z.id}-title`}
+                    style={{
+                      // subtle translucent panel + border + soft shadow
+                      background: "rgba(255,255,255,0.02)",
+                      border: "1px solid rgba(255,255,255,0.06)",
+                      boxShadow: disabled ? "none" : "0 6px 18px rgba(2,6,23,0.55)",
+                      backdropFilter: "blur(4px)",
+                    }}
                   >
                     <div className="min-w-0">
                       <div className="flex items-start justify-between gap-3">
@@ -199,9 +206,15 @@ export default function WorldMap() {
           return (
             <section
               key={r.id}
-              className="rounded-lg p-4 fantasy-border bg-panel-800 flex flex-col justify-between min-h-[140px]"
               aria-labelledby={`region-${r.id}-title`}
               title={r.name}
+              className="rounded-lg p-4 flex flex-col justify-between min-h-[140px] transition-transform duration-150"
+              style={{
+                background: "rgba(255,255,255,0.02)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                boxShadow: "0 8px 26px rgba(2,6,23,0.55)",
+                backdropFilter: "blur(4px)",
+              }}
             >
               <div className="min-w-0">
                 <h3 id={`region-${r.id}-title`} className="font-semibold text-gray-100 truncate">{r.name}</h3>

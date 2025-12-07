@@ -186,5 +186,208 @@
     "kind": "material",
     "description": "A glossy scale from a Sea Serpent. Valued for water-resistant gear and certain alchemical brews.",
     "price": 12
+  },
+  
+  "potion-small": {
+    "id": "potion-small",
+    "name": "Small Potion",
+    "kind": "heal",
+    "healAmount": 20,
+    "description": "Heals 20 HP.",
+    "price": 8
+  },
+
+  "potion": {
+    "id": "potion",
+    "name": "Potion",
+    "kind": "heal",
+    "healAmount": 50,
+    "description": "Heals 50 HP.",
+    "price": 20
+  },
+  "potion-hi": {
+    "id": "potion-hi",
+    "name": "Hi-Potion",
+    "kind": "heal",
+    "healAmount": 150,
+    "description": "Heals 150 HP.",
+    "price": 45
+  },
+
+  "ether": {
+    "id": "ether",
+    "name": "Ether",
+    "kind": "mana",
+    "mpAmount": 25,
+    "description": "Restores 25 MP.",
+    "price": 28
+  },
+  "ether-hi": {
+    "id": "ether-hi",
+    "name": "Hi-Ether",
+    "kind": "mana",
+    "mpAmount": 60,
+    "description": "Restores 60 MP.",
+    "price": 55
+  },
+  
+  "steel-sword": {
+    "id": "steel-sword",
+    "name": "Steel Sword",
+    "kind": "equipment",
+    "slot": "weapon",
+    "description": "A solid blade forged for real combat. +6 ATK, +15% crit dmg.",
+    "bonus": {
+      "atk": 6,
+      "stats": { "CRITDMG": 15 }
+    },
+    "price": 120
+  },
+
+  "steel-shield": {
+    "id": "steel-shield",
+    "name": "Steel Shield",
+    "kind": "equipment",
+    "slot": "offhand",
+    "description": "A durable steel shield. +3 DEF, +2 MaxHP.",
+    "bonus": {
+      "def": 3,
+      "maxHP": 2
+    },
+    "price": 90
+  },
+
+  "steel-helmet": {
+    "id": "steel-helmet",
+    "name": "Steel Helmet",
+    "kind": "equipment",
+    "slot": "head",
+    "description": "Hefty helmet offering solid protection. +4 MaxHP, +1 DEF.",
+    "bonus": {
+      "maxHP": 4,
+      "def": 1
+    },
+    "price": 70
+  },
+
+  "steel-armor": {
+    "id": "steel-armor",
+    "name": "Steel Armor",
+    "kind": "equipment",
+    "slot": "torso",
+    "description": "Thick steel plating. +4 DEF, +10 MaxHP.",
+    "bonus": {
+      "def": 4,
+      "maxHP": 10
+    },
+    "price": 150
+  },
+
+  "steel-boots": {
+    "id": "steel-boots",
+    "name": "Steel Boots",
+    "kind": "equipment",
+    "slot": "boots",
+    "description": "Sturdy boots. +2 DEF.",
+    "bonus": {
+      "def": 2
+    },
+    "price": 60
+  },
+
+  "steel-ring": {
+    "id": "steel-ring",
+    "name": "Steel Ring",
+    "kind": "equipment",
+    "slot": "accessory",
+    "description": "Increases fortitude. +2 DEF, +3% crit chance.",
+    "bonus": {
+      "def": 2,
+      "stats": { "CRIT": 3 }
+    },
+    "price": 95
+  },
+
+  "mythril-sword": {
+    "id": "mythril-sword",
+    "name": "Mythril Sword",
+    "kind": "equipment",
+    "slot": "weapon",
+    "description": "A blade of enchanted mythril. +10 ATK, +25% crit dmg.",
+    "bonus": {
+      "atk": 10,
+      "stats": { "CRITDMG": 25 }
+    },
+    "price": 240
+  },
+
+  "mythril-shield": {
+    "id": "mythril-shield",
+    "name": "Mythril Shield",
+    "kind": "equipment",
+    "slot": "offhand",
+    "description": "Light yet incredibly strong. +5 DEF, +4 M-DEF.",
+    "bonus": {
+      "def": 5,
+      "mDef": 4
+    },
+    "price": 210
+  },
+
+  "mythril-helmet": {
+    "id": "mythril-helmet",
+    "name": "Mythril Helmet",
+    "kind": "equipment",
+    "slot": "head",
+    "description": "A magically resistant helm. +6 MaxHP, +2 M-DEF.",
+    "bonus": {
+      "maxHP": 6,
+      "mDef": 2
+    },
+    "price": 160
+  },
+
+  "mythril-armor": {
+    "id": "mythril-armor",
+    "name": "Mythril Armor",
+    "kind": "equipment",
+    "slot": "torso",
+    "description": "Elite armor forged from mythril. +6 DEF, +14 MaxHP, +2 M-DEF.",
+    "bonus": {
+      "def": 6,
+      "maxHP": 14,
+      "mDef": 2
+    },
+    "price": 300
+  },
+
+  "mythril-boots": {
+    "id": "mythril-boots",
+    "name": "Mythril Boots",
+    "kind": "equipment",
+    "slot": "boots",
+    "description": "Light boots imbued with speed. +2 DEF, +2 DEX.",
+    "bonus": {
+      "def": 2,
+      "stats": { "DEX": 2 }
+    },
+    "price": 140
+  },
+
+  "mythril-charm": {
+    "id": "mythril-charm",
+    "name": "Mythril Charm",
+    "kind": "equipment",
+    "slot": "accessory",
+    "description": "A rare charm boosting magical precision. +3 M-ATK, +6% crit chance.",
+    "bonus": {
+      "mAtk": 3,
+      "stats": { "CRIT": 6 }
+    },
+    "price": 180
   }
+
+
 }
+
+

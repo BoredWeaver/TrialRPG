@@ -1,1 +1,41 @@
 @import "tailwindcss";
+/* src/index.css (append) */
+
+/* subtle translucent panel + border used as ".panel" or ".fantasy-border" */
+.fantasy-border {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0.5rem; /* 8px */
+}
+
+/* soft panel background (used as .panel) */
+.panel {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: 0.625rem; /* 10px */
+}
+
+/* small translucent muted bg */
+.muted {
+  background: rgba(255,255,255,0.02);
+  color: #cbd5e1;
+}
+
+/* neon-ish glow used for buttons/cards */
+.fantasy-glow {
+  box-shadow: 0 8px 30px rgba(99,102,241,0.12);
+}
+
+/* stronger neon (use for selected) */
+.fantasy-glow-strong {
+  box-shadow: 0 10px 40px rgba(96,165,250,0.22), 0 0 10px rgba(96,165,250,0.12) inset;
+}
+
+/* small helpers */
+.ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* status pill background fallback */
+.bg-panel-800 { background: rgba(6,8,18,0.85); }
+
+/* optional: make buttons slightly lift on hover for non-touch */
+@media (hover: hover) {
+  .hover-lift:hover { transform: translateY(-4px); transition: transform .12s ease; }
+}

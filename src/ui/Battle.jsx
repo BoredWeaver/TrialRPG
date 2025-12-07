@@ -8,6 +8,8 @@ import { useBattleContext } from "../state/BattleContext.jsx";
  * - Fixes overflowing text, tightens spacing for mobile, truncates long strings.
  * - Enemies on top, player below, fixed bottom action bar.
  * - No logic changes.
+ *
+ * Change: selected enemy card now gets a neon-blue border + subtle glow
  */
 
 export default function Battle() {
@@ -151,7 +153,7 @@ export default function Battle() {
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 fantasy-border panel">
         <div className="min-w-0">
-          <div className="text-base font-semibold tracking-wide ellipsis">Tide of Fate</div>
+          <div className="text-base font-semibold tracking-wide ellipsis">Trial RPG</div>
           <div className="text-xs text-gray-300 truncate">Lv.{progress?.level ?? 1} • {Math.round((progress?.pct ?? 0) * 100)}% • Pts: {progress?.points ?? 0}</div>
         </div>
 
@@ -169,7 +171,7 @@ export default function Battle() {
 
           {safeBattle.over && (
             <button
-              onClick={() => navigate("/dungeon")}
+              onClick={() => navigate(-1)}
               className="px-3 py-1 rounded-md text-sm font-medium fantasy-glow"
               aria-label="Return to dungeon"
             >
@@ -202,19 +204,39 @@ export default function Battle() {
               const hp = Number(en?.hp || 0);
               const maxHP = Math.max(1, Number(en?.maxHP || 1));
               const pct = Math.max(0, Math.min(100, Math.round((hp / maxHP) * 100)));
+
+              // build base style and selected override
+              const baseCardStyle = {
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+                padding: 12,
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.06)",
+                background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+              };
+
+              // when selected, apply neon blue border + glow
+              const selectedStyle = selected ? {
+                borderColor: "#00d4ff",
+                boxShadow: "0 6px 28px rgba(0,212,255,0.12), 0 0 18px rgba(0,160,255,0.14), inset 0 0 2px rgba(0,212,255,0.06)",
+                outline: "2px solid rgba(0,212,255,0.06)",
+              } : {};
+
               return (
-                /* Enemy article — replace existing article block inside enemiesArr.map with this */
+                /* Enemy article — clicking whole card selects the enemy */
                 <article
                   key={`${en?.id || "enemy"}-${idx}`}
                   data-enemy-index={idx}
                   onClick={() => alive && typeof selectTarget === "function" && selectTarget(idx)}
                   role="listitem"
                   aria-selected={selected}
-                  className={`p-3 rounded-lg fantasy-border panel text-sm
-    ${selected ? "ring-2 ring-indigo-400 fantasy-glow" : ""}
-    ${!alive ? "opacity-40" : "cursor-pointer active:scale-[0.98]"}
-  `}
-                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                  className={`${!alive ? "opacity-40" : "cursor-pointer active:scale-[0.98]"}`}
+                  style={{
+                    ...baseCardStyle,
+                    ...(selected ? { borderWidth: 2 } : {}),
+                    ...selectedStyle
+                  }}
                 >
                   {/* MOBILE LAYOUT (vertical) */}
                   <div className="flex flex-col items-center text-center sm:hidden">
@@ -330,18 +352,7 @@ export default function Battle() {
                       ))}
                     </div>
                   )}
-
-                  {/* Select button */}
-                  <button
-                    disabled={!alive}
-                    className={`w-full py-2 rounded text-sm font-medium mt-2 ${selected ? "bg-indigo-600 text-white" : "bg-white/3 text-gray-200"
-                      } ${!alive ? "opacity-50" : ""}`}
-                  >
-                    {selected ? "Selected" : alive ? "Select" : "Defeated"}
-                  </button>
                 </article>
-
-
               );
             })}
           </div>
@@ -442,122 +453,201 @@ export default function Battle() {
       </div>
 
       {/* Fixed bottom action bar */}
-      <div className="fixed left-0 right-0 bottom-0 z-50 fantasy-border bg-[#060812]/95 backdrop-blur-sm py-3 px-4">
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-xs text-gray-300">
-            {busy && !safeBattle.over ? "Enemy thinking…" : (safeBattle.over ? (safeBattle.result === "win" ? "Battle Finished" : "You lost") : (isPlayerTurn ? "Your turn" : "Enemy turn"))}
-          </div>
-          <div className="text-xs text-gray-400">Choose an action</div>
+{/* Fixed bottom action bar */}
+<div className="fixed inset-x-0 bottom-0 z-50 safe-bottom">
+  <div className="mx-auto max-w-5xl px-4 pb-safe pt-3">
+    <div className="backdrop-blur-sm bg-[#060812]/95 fantasy-border rounded-t-xl border-t border-white/6 px-4 py-3">
+      
+      {/* Top Row */}
+      <div className="flex items-center justify-between gap-3 mb-3">
+        <div className="text-xs text-gray-200 truncate" aria-live="polite">
+          {busy && !safeBattle.over
+            ? "Enemy thinking…"
+            : safeBattle.over
+              ? (safeBattle.result === "win" ? "Battle finished — congratulations" : "Battle finished — you lost")
+              : (isPlayerTurn ? "Your turn" : "Enemy turn")}
         </div>
 
-        <div className="flex gap-3 flex-col sm:flex-row">
+        <div className="text-xs text-gray-400 hidden sm:inline">Choose an action</div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3">
+
+        {/* Attack */}
+        <button
+          onClick={onPrimaryAttack}
+          disabled={!actions?.canAttack || enemiesArr.length === 0 || !isPlayerTurn}
+          aria-label={`Attack target #${Math.max(0, effectiveSelectedTarget) + 1}`}
+          className={`w-full sm:w-48 flex items-center justify-between gap-2 py-3 px-4 rounded-md text-sm font-semibold transition-shadow
+            ${(!actions?.canAttack || !isPlayerTurn)
+              ? "bg-white/6 text-gray-500 border border-white/6 cursor-not-allowed"
+              : "bg-indigo-700 text-white border border-indigo-700 shadow-sm hover:shadow-md"}`}
+        >
+          <span className="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 opacity-90" fill="none" stroke="currentColor">
+              <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M3 21l18-18M14 3l7 7-7-7z"/>
+            </svg>
+            Attack
+          </span>
+          <span className="text-xs text-gray-200">#{Math.max(0, effectiveSelectedTarget) + 1}</span>
+        </button>
+
+        {/* Spell + Item buttons */}
+        <div className="flex gap-3 w-full">
+
+          {/* Spells */}
           <button
-            onClick={onPrimaryAttack}
-            disabled={!actions?.canAttack || enemiesArr.length === 0 || !isPlayerTurn}
-            className={`w-full sm:flex-1 py-3 rounded-md text-sm font-semibold ${(!actions?.canAttack || !isPlayerTurn) ? "bg-white/6 text-gray-500 border border-white/6" : "bg-indigo-900 text-indigo-100 border border-indigo-700"}`}
-            title={`Attack target #${Math.max(0, effectiveSelectedTarget) + 1}`}
+            onClick={onOpenSpells}
+            disabled={!isPlayerTurn || !(spells?.length)}
+            className={`flex-1 py-3 px-4 rounded-md text-sm font-semibold transition
+              ${(!isPlayerTurn || !(spells?.length))
+                ? "bg-white/6 text-gray-500 border border-white/6 cursor-not-allowed"
+                : "bg-emerald-700 text-white border border-emerald-700 shadow-sm hover:shadow-md"}`}
           >
-            <div className="flex items-center justify-between">
-              <span>Attack</span>
-              <span className="text-xs text-gray-300">#{Math.max(0, effectiveSelectedTarget) + 1}</span>
-            </div>
+            <span className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 opacity-90" fill="none" stroke="currentColor">
+                  <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M12 2v6M5 9l7 7 7-7"/>
+                </svg>
+                Spells
+              </span>
+              <span className="text-xs">{spells?.length ?? 0}</span>
+            </span>
           </button>
 
-          <div className="flex gap-3 w-full">
-            <button
-              onClick={onOpenSpells}
-              disabled={!isPlayerTurn || !(spells && spells.length)}
-              className={`flex-1 py-3 rounded-md text-sm font-semibold ${(!isPlayerTurn || !(spells && spells.length)) ? "bg-white/6 text-gray-500 border border-white/6" : "bg-emerald-900 text-emerald-100 border border-emerald-700"}`}
-              title={`${(spells?.length) ?? 0} spells available`}
-            >
-              <div className="flex items-center justify-between">
-                <span>Spells</span>
-                <span className="text-xs text-gray-300">{(spells?.length) ?? 0}</span>
-              </div>
-            </button>
+          {/* Items */}
+          <button
+            onClick={onOpenItems}
+            disabled={!isPlayerTurn || !(items?.length)}
+            className={`flex-1 py-3 px-4 rounded-md text-sm font-semibold transition
+              ${(!isPlayerTurn || !(items?.length))
+                ? "bg-white/6 text-gray-500 border border-white/6 cursor-not-allowed"
+                : "bg-yellow-700 text-white border border-yellow-700 shadow-sm hover:shadow-md"}`}
+          >
+            <span className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 opacity-90" fill="none" stroke="currentColor">
+                  <path strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="M20 12H4"/>
+                </svg>
+                Items
+              </span>
+              <span className="text-xs">
+                {(items || []).filter(it =>
+                  ["heal", "mana", "damage"].includes(it.kind)
+                ).length ?? 0}
+              </span>
+            </span>
+          </button>
 
-            <button
-              onClick={onOpenItems}
-              disabled={!isPlayerTurn || !(items && items.length)}
-              className={`flex-1 py-3 rounded-md text-sm font-semibold ${(!isPlayerTurn || !(items && items.length)) ? "bg-white/6 text-gray-500 border border-white/6" : "bg-yellow-900 text-yellow-100 border border-yellow-700"}`}
-              title={`${(items?.filter(i => (i.kind === "heal" || i.kind === "mana" || i.kind === "damage")).length) ?? 0} usable items`}
-            >
-              <div className="flex items-center justify-between">
-                <span>Items</span>
-                <span className="text-xs text-gray-300">{(items?.filter(i => (i.kind === "heal" || i.kind === "mana" || i.kind === "damage")).length) ?? 0}</span>
-              </div>
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Spells bottom sheet */}
-      {showSpells && (
-        <div className="fixed inset-0 z-60 flex items-end">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setShowSpells(false)} />
-          <div className="relative w-full rounded-t-xl shadow-xl max-h-[70vh] overflow-auto p-4 fantasy-border panel">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-lg font-semibold">Spells</div>
-              <button onClick={() => setShowSpells(false)} className="px-2 py-1 border rounded text-sm text-gray-200">Close</button>
-            </div>
+    </div>
+  </div>
+</div>
 
-            <div className="grid grid-cols-2 gap-3">
-              {(!spells || spells.length === 0) && <div className="col-span-full text-gray-400">No spells.</div>}
-              {(spells || []).map(sp => {
-                const can = !!actions?.spells?.[sp.id];
-                const aoe = isAoeSpell(sp);
-                const cd = sp._cooldownRemaining || 0;
-                return (
-                  <button
-                    key={sp.id}
-                    onClick={() => { if (!can) return; if (aoe) doCast(sp.id); else doCast(sp.id, effectiveSelectedTarget); setShowSpells(false); }}
-                    disabled={!can}
-                    className={`text-left p-3 rounded border ${can ? "bg-white/3 hover:bg-white/4" : "bg-white/6 text-gray-500 cursor-not-allowed"}`}
-                  >
-                    <div className="font-medium truncate">{trunc(sp.name, 36)}{aoe ? " • AOE" : ""}</div>
-                    <div className="text-xs text-gray-400 mt-1 truncate">{sp.cost ?? 0} MP {cd ? `• CD ${cd}` : ""}</div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
+<style>{`
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 12px); }
+`}</style>
 
-      {/* Items bottom sheet */}
-      {showItems && (
-        <div className="fixed inset-0 z-60 flex items-end">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setShowItems(false)} />
-          <div className="relative w-full rounded-t-xl shadow-xl max-h-[70vh] overflow-auto p-4 fantasy-border panel">
-            <div className="flex items-center justify-between mb-3">
-              <div className="text-lg font-semibold">Items</div>
-              <button onClick={() => setShowItems(false)} className="px-2 py-1 border rounded text-sm text-gray-200">Close</button>
-            </div>
+{/* SPELLS SHEET */}
+{showSpells && (
+  <div className="fixed inset-0 z-60 flex items-end">
+    <div className="absolute inset-0 bg-black/60" onClick={() => setShowSpells(false)} />
+    <div className="relative w-full rounded-t-xl shadow-2xl max-h-[72vh] overflow-auto p-4 fantasy-border panel">
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-lg font-semibold">Spells</div>
+        <button onClick={() => setShowSpells(false)} className="px-2 py-1 border rounded text-sm">Close</button>
+      </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              {((items || []).filter(it => it.kind === "heal" || it.kind === "mana" || it.kind === "damage").length === 0) && <div className="col-span-full text-gray-400">No usable items.</div>}
-              {(items || []).filter(it => it.kind === "heal" || it.kind === "mana" || it.kind === "damage").map(it => {
-                const can = !!actions?.items?.[it.id];
-                const aoe = isAoeItem(it);
-                const cd = it._cooldownRemaining || 0;
-                return (
-                  <button
-                    key={it.id}
-                    onClick={() => { if (!can) return; if (aoe) doUse(it.id); else doUse(it.id, effectiveSelectedTarget); setShowItems(false); }}
-                    disabled={!can}
-                    className={`text-left p-3 rounded border ${can ? "bg-white/3 hover:bg-white/4" : "bg-white/6 text-gray-500 cursor-not-allowed"}`}
-                  >
-                    <div className="font-medium truncate">{trunc(it.name, 34)} ×{it.qty}{aoe ? " • AOE" : ""}</div>
-                    <div className="text-xs text-gray-400 mt-1 truncate">
-                      {it.kind === "heal" ? `Heals ${it.healAmount ?? ""} HP` : it.kind === "mana" ? `Restores ${it.mpAmount ?? ""} MP` : `${it.damage ?? ""} dmg`} {cd ? `• CD ${cd}` : ""}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="grid grid-cols-2 gap-3">
+        {(spells?.length === 0) && (
+          <div className="col-span-full text-gray-400">No spells.</div>
+        )}
+
+        {spells?.map(sp => {
+          const can = !!actions?.spells?.[sp.id];
+          const aoe = isAoeSpell(sp);
+          return (
+            <button
+              key={sp.id}
+              disabled={!can}
+              onClick={() => {
+                if (!can) return;
+                aoe ? doCast(sp.id) : doCast(sp.id, effectiveSelectedTarget);
+                setShowSpells(false);
+              }}
+              className={`text-left p-3 rounded-lg border transition
+                ${can ? "bg-white/5 hover:bg-white/8" : "bg-white/10 text-gray-500 cursor-not-allowed"}`}
+            >
+              <div className="font-medium truncate">
+                {sp.name}{aoe ? " • AOE" : ""}
+              </div>
+              <div className="text-xs text-gray-400 mt-1 truncate">
+                {sp.cost} MP {sp._cooldownRemaining ? `• CD ${sp._cooldownRemaining}` : ""}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+)}
+
+{/* ITEMS SHEET */}
+{showItems && (
+  <div className="fixed inset-0 z-60 flex items-end">
+    <div className="absolute inset-0 bg-black/60" onClick={() => setShowItems(false)} />
+    <div className="relative w-full rounded-t-xl shadow-2xl max-h-[72vh] overflow-auto p-4 fantasy-border panel">
+
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-lg font-semibold">Items</div>
+        <button onClick={() => setShowItems(false)} className="px-2 py-1 border rounded text-sm">Close</button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        {((items || []).filter(it => ["heal", "mana", "damage"].includes(it.kind)).length === 0) && (
+          <div className="col-span-full text-gray-400">No usable items.</div>
+        )}
+
+        {(items || []).filter(it => ["heal", "mana", "damage"].includes(it.kind)).map(it => {
+          const can = !!actions?.items?.[it.id];
+          const aoe = isAoeItem(it);
+          return (
+            <button
+              key={it.id}
+              disabled={!can}
+              onClick={() => {
+                if (!can) return;
+                aoe ? doUse(it.id) : doUse(it.id, effectiveSelectedTarget);
+                setShowItems(false);
+              }}
+              className={`text-left p-3 rounded-lg border transition
+                ${can ? "bg-white/5 hover:bg-white/8" : "bg-white/10 text-gray-500 cursor-not-allowed"}`}
+            >
+              <div className="font-medium truncate">
+                {it.name} ×{it.qty} {aoe ? "• AOE" : ""}
+              </div>
+
+              <div className="text-xs text-gray-400 mt-1 truncate">
+                {it.kind === "heal"
+                  ? `Heals ${it.healAmount}`
+                  : it.kind === "mana"
+                    ? `Restores ${it.mpAmount} MP`
+                    : `${it.damage} dmg`}
+                {it._cooldownRemaining ? ` • CD ${it._cooldownRemaining}` : ""}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

@@ -10,7 +10,7 @@ import Combat from "./ui/Battle.jsx";
 import MenuScreen from "./ui/MenuScreen.jsx";
 import QuestBoard from "./ui/QuestBoard.jsx";
 import DungeonScreen from "./ui/DungeonScreen.jsx";
-
+import Tutorial from "./ui/Tutorial.jsx";
 // new inspectors
 import SpellBook from "./ui/SpellBook.jsx";
 import Enemies from "./ui/Enemies.jsx";
@@ -36,11 +36,12 @@ export default function App() {
 
 function MainLayout() {
   return (
-    <div className="min-h-screen bg-[#0b0e11] text-gray-200">
+    <div className="min-h-screen bg-[url('../src/assets/bg1.jpg')] 
+          bg-cover bg-center bg-no-repeat text-gray-200">
       <TopNav />
       <main className="px-4 py-6 max-w-5xl mx-auto w-full">
         {/* container panel */}
-        <div className="w-full rounded-lg bg-[#0f141a] border border-[#1c232c] p-4 shadow-inner">
+        <div className="w-full rounded-lg bg-[#0c062377] p-4 shadow-inner">
           <Routes>
             <Route path="/" element={<City />} />
             <Route path="/map" element={<WorldMap />} />
@@ -53,9 +54,7 @@ function MainLayout() {
             <Route path="/quests" element={<QuestBoard />} />
 
             {/* Inspector pages */}
-            <Route path="/spellbook" element={<SpellBook />} />
-            <Route path="/enemies" element={<Enemies />} />
-            <Route path="/dungeons" element={<Dungeons />} />
+            <Route path="/tutorial" element={<Tutorial />} />
           </Routes>
         </div>
       </main>
@@ -78,9 +77,7 @@ function TopNav() {
           <NavLink to="/quests">Quests</NavLink>
 
           {/* inspector links (non-intrusive) */}
-          <NavLink to="/spellbook">SpellBook</NavLink>
-          <NavLink to="/enemies">Enemies</NavLink>
-          <NavLink to="/dungeons">Dungeons</NavLink>
+          <NavLink to="/tutorial">Tutorial</NavLink>
         </nav>
 
         <div className="text-right text-xs text-gray-400">
