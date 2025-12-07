@@ -66,6 +66,12 @@ function makeEmptyProgressForQuest(qDef) {
     case "visit":
     case "travel":
       return { visited: false };
+    case "dungeon_clear":
+    case "clear":
+    case "dungeon":
+      // dungeon-clear quests don't require incremental progress for now,
+      // but we keep a flag to reflect cleared state if needed later.
+      return { cleared: false };
     default:
       return { progress: 0 };
   }
@@ -111,6 +117,7 @@ export function abandonQuest(questId) {
  *  - { type: "kill", enemyId: "goblin", qty: 1 }
  *  - { type: "collect", itemId: "slime_gel", qty: 1 }
  *  - { type: "visit", locationId: "central-zone-3" }
+ *  - { type: "dungeon_clear", dungeonId: "goblin-den" }
  *
  * This function returns { updated: [questId,...], completed: [questId,...], progress: mergedProgress }
  */
@@ -177,6 +184,27 @@ export function updateQuestProgress(event = {}) {
           completed.add(qid);
           delete active[qid];
           completedNow.push(qid);
+        }
+        break;
+
+      case "dungeon_clear":
+      case "clear":
+      case "dungeon":
+        // support several synonyms for this quest type
+        // event: { type: "dungeon_clear", dungeonId: "goblin-den" }
+        if (event.type === "dungeon_clear" || event.type === "dungeon" || event.type === "clear") {
+          // quest target may be a string or an array of dungeon ids
+          const target = qDef.target && qDef.target.dungeonId;
+          const dungeonId = event.dungeonId || event.dungeon || event.id || null;
+          if (!target) break;
+          const matches = Array.isArray(target) ? target.includes(dungeonId) : String(target) === String(dungeonId);
+          if (matches) {
+            state.progress.cleared = true;
+            changed = true;
+            completed.add(qid);
+            delete active[qid];
+            completedNow.push(qid);
+          }
         }
         break;
 
@@ -258,7 +286,6 @@ on("kill", (payload = {}) => {
 
 on("collect", (payload = {}) => {
   try {
-
     updateQuestProgress({ type: "collect", itemId: payload.itemId, qty: payload.qty || 1 });
   } catch (e) {
     console.error("quest handler collect failed", e);
@@ -267,7 +294,6 @@ on("collect", (payload = {}) => {
 
 on("visit", (payload = {}) => {
   try {
-
     updateQuestProgress({ type: "visit", locationId: payload.locationId });
   } catch (e) {
     console.error("quest handler visit failed", e);
@@ -276,9 +302,23 @@ on("visit", (payload = {}) => {
 
 on("travel", (payload = {}) => {
   try {
-
     updateQuestProgress({ type: "travel", from: payload.from, to: payload.to });
   } catch (e) {
     console.error("quest handler travel failed", e);
+  }
+});
+
+// New: dungeon-clear subscription — fire this when a dungeon run is cleared/finished
+on("dungeon_clear", (payload = {}) => {
+  try {
+    // support payload shape { dungeonId } or { id } depending on your run code
+    const dungeonId = payload.dungeonId || payload.id || payload.key || null;
+    if (!dungeonId) {
+      updateQuestProgress({ type: "dungeon_clear" });
+    } else {
+      updateQuestProgress({ type: "dungeon_clear", dungeonId });
+    }
+  } catch (e) {
+    console.error("quest handler dungeon_clear failed", e);
   }
 });
