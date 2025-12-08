@@ -1,0 +1,167 @@
+:root{
+  --panel-bg: rgba(10,14,20,0.88);
+  --panel-border: rgba(207,211,216,0.78);
+  --muted-border: #1c232c;
+  --accent: #b9ffdf;
+  --panel-shadow: 0 8px 26px rgba(0,0,0,0.45);
+  --panel-inner-stroke: rgba(255,255,255,0.02);
+  --btn-ink: #0b0b0b;
+}
+
+/* Page background (subtle gradients) */
+.ui-kenney-bg {
+  background:
+    radial-gradient(900px 420px at 10% 10%, rgba(60,80,90,0.06), transparent 10%),
+    radial-gradient(700px 300px at 90% 85%, rgba(30,40,50,0.05), transparent 10%),
+    #071014;
+  min-height: 100vh;
+  color: #e7eef6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* -------------------------
+   Panels: minimal vs standard vs ornate
+   ------------------------- */
+
+/* Minimal main panel: subtle border, roomy, no corners */
+.ui-panel-minimal {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(0,0,0,0));
+  border: 1px solid rgba(255,255,255,0.03);
+  padding: 1.05rem;
+  border-radius: 6px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+}
+
+/* Standard panel: light border, slight corners NOT decorated */
+.ui-panel {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1.5px solid rgba(207,211,216,0.12); /* softer */
+  padding: 0.85rem;
+  border-radius: 6px;
+  box-shadow: var(--panel-shadow);
+  overflow: visible;
+}
+
+/* Ornate panel: decorative corner accents, subtle inner stroke */
+.ui-panel-ornate {
+  position: relative;
+  background: var(--panel-bg);
+  border: 2px solid var(--panel-border);
+  padding: 0.72rem;
+  border-radius: 3px;
+  box-shadow: var(--panel-shadow);
+}
+
+/* Decorative corner blocks for ornate panels (smaller, less obtrusive) */
+.ui-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border: 2px solid var(--panel-border);
+  background: transparent;
+  pointer-events: none;
+  opacity: 0.95;
+}
+.ui-corner.tl { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+.ui-corner.tr { top: -5px; right: -5px; border-left: none; border-bottom: none; }
+.ui-corner.bl { bottom: -5px; left: -5px; border-right: none; border-top: none; }
+.ui-corner.br { bottom: -5px; right: -5px; border-left: none; border-top: none; }
+
+/* Subtle inner stroke for depth when needed */
+.ui-panel.inner-frame { box-shadow: inset 0 0 0 1px var(--panel-inner-stroke); }
+
+/* -------------------------
+   Buttons (balanced, accessible)
+   ------------------------- */
+.ui-btn {
+  position: relative;
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  background: rgba(18,22,26,0.92);
+  border: 1.5px solid rgba(207,211,216,0.12);
+  border-radius: 3px;
+  font-weight: 700;
+  color: var(--btn-ink);
+  min-width: 7.2rem;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.55);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  outline: none;
+}
+
+/* Inner white bar retained for signature Kenney look */
+.ui-btn .ui-btn-inner {
+  display: inline-block;
+  background: #fff;
+  padding: 0.2rem 0.55rem;
+  border: 1.5px solid rgba(207,211,216,0.12);
+  transform: translateY(-2px);
+  border-radius: 2px;
+  font-weight: 700;
+}
+
+/* Smaller, less ornate hero button */
+.ui-btn-min { padding: 0.35rem 0.7rem; min-width: 6rem; border: 1px solid rgba(255,255,255,0.04); }
+
+/* Ornate corners only when requested for a button (less intrusive) */
+.ui-btn .corner { width: 9px; height: 9px; position: absolute; box-sizing: border-box; border: 2px solid var(--panel-border); opacity:0.95; }
+.ui-btn .corner.tl { top: -5px; left: -5px; border-right:none; border-bottom:none; }
+.ui-btn .corner.tr { top: -5px; right: -5px; border-left:none; border-bottom:none; }
+.ui-btn .corner.bl { bottom: -5px; left: -5px; border-right:none; border-top:none; }
+.ui-btn .corner.br { bottom: -5px; right: -5px; border-left:none; border-top:none; }
+
+/* Hover / focus states */
+.ui-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(80,200,180,0.06); }
+.ui-btn:active { transform: translateY(0); box-shadow: 0 4px 10px rgba(0,0,0,0.6); }
+.ui-btn:focus-visible { box-shadow: 0 0 0 3px rgba(90,220,200,0.12); border-color: rgba(185,255,223,0.5); }
+.ui-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* -------------------------
+   Typography + helpers
+   ------------------------- */
+.ui-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-align: center;
+  text-shadow: 0 0 6px rgba(75,230,200,0.12);
+  margin-bottom: 0.3rem;
+}
+.ui-heading { font-size: 0.92rem; font-weight:700; color:#e8f2f6; }
+.ui-label { font-size: 0.82rem; color:#bfc8cf; }
+.ui-value { font-size: 0.95rem; color:#f6fbff; font-weight:700; }
+
+.muted { color:#9aa6ad; font-size:0.88rem; }
+
+/* -------------------------
+   EXP bar + avatar
+   ------------------------- */
+.exp-bar {
+  height:9px; width:100%; background: rgba(255,255,255,0.03); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,0.02);
+}
+.exp-bar > .fill { height:100%; border-radius:999px; transition: width 240ms cubic-bezier(.2,.8,.2,1); background: linear-gradient(90deg,#5eead4,#60a5fa); }
+
+.avatar { width:64px; height:64px; border-radius:8px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03); }
+
+/* -------------------------
+   Layout utils (focused)
+   ------------------------- */
+.k-grid { display:grid; gap:1rem; }
+@media(min-width:768px){ .k-grid.cols-3{ grid-template-columns: 2fr 1fr; align-items:start; } }
+
+.k-sep { height:1px; background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); margin:0.6rem 0; }
+
+.p-sm{ padding:0.5rem; } .p-md{ padding:0.95rem; } .mt-sm{ margin-top:0.5rem; } .mb-sm{ margin-bottom:0.5rem; }
+
+/* responsive: stack hero button nicely on small screens */
+@media(max-width:640px){
+  .k-grid.cols-3 { grid-template-columns: 1fr; }
+  .avatar { width:56px; height:56px; }
+  .ui-title { font-size: 1.15rem; }
+  .ui-btn { min-width: 6rem; }
+}

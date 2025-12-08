@@ -1,0 +1,318 @@
+{
+  "dungeons": [
+    {
+      "id": "goblin-den",
+      "name": "Goblin Den",
+      "theme": "cavern / bandit lair",
+      "description": "A cramped network of tunnels infested with goblins, scout bats and the occasional goblin shaman. Expect many small skirmishes and quick, low-reward drops.",
+      "recommendedLevel": 1,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": {
+        "combat": 0.80,
+        "treasure": 0.10,
+        "rest": 0.08,
+        "special": 0.02
+      },
+      "enemyPool": {
+        "common": [
+          "goblin",
+          "bat"
+        ],
+        "uncommon": [
+          "goblin_archer",
+          "goblin_shaman"
+        ],
+        "rare": []
+      },
+      "minEnemiesPerRoom": 2,
+      "maxEnemiesPerRoom": 3,
+      "boss": {
+        "id": "troll",
+        "name": "Troll Warlord",
+        "notes": "Single powerful melee boss that appears after most tiles explored."
+      },
+      "lootHints": [
+        "potion",
+        "bat_wing",
+        "orc_tooth (rare from orc crossover)"
+      ],
+      "clearRewards": {
+        "gold": 80,
+        "exp": 250,
+        "items": [
+          {
+            "id": "potion",
+            "qty": 2
+          },
+          {
+            "id": "bat_wing",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "slime-pond",
+      "name": "Slime Pond",
+      "theme": "wetlands / ooze-filled bog",
+      "description": "Mucous pools and slippery banks. Slimes dominate the area; some water-twisted abominations lurk deeper.",
+      "recommendedLevel": 2,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": {
+        "combat": 0.75,
+        "treasure": 0.12,
+        "rest": 0.08,
+        "special": 0.05
+      },
+      "enemyPool": {
+        "common": [
+          "slime"
+        ],
+        "uncommon": [
+          "sea-serpent",
+          "slime"
+        ],
+        "rare": []
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 2,
+      "boss": {
+        "id": "sea-serpent",
+        "name": "Bog Sea-Serpent",
+        "notes": "Powerful water-element boss; vulnerable to fire but resists ice."
+      },
+      "lootHints": [
+        "slime_gel",
+        "serpent_scale",
+        "potion"
+      ],
+      "clearRewards": {
+        "gold": 120,
+        "exp": 320,
+        "items": [
+          {
+            "id": "slime_gel",
+            "qty": 2
+          },
+          {
+            "id": "potion",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "howling-woods",
+      "name": "Howling Woods",
+      "theme": "forest / wilds",
+      "description": "A moonlit forest where wolves and lone predators roam. Watch for ambushes from packs.",
+      "recommendedLevel": 3,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": {
+        "combat": 0.85,
+        "treasure": 0.08,
+        "rest": 0.05,
+        "special": 0.02
+      },
+      "enemyPool": {
+        "common": [
+          "wolf"
+        ],
+        "uncommon": [
+          "wolf",
+          "bat"
+        ],
+        "rare": [
+          "troll"
+        ]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": {
+        "id": "troll",
+        "name": "Forest Troll",
+        "notes": "A heavy-hitting beast; packs may lead you to it."
+      },
+      "lootHints": [
+        "wolf_pelt",
+        "troll_hide",
+        "potion"
+      ],
+      "clearRewards": {
+        "gold": 140,
+        "exp": 380,
+        "items": [
+          {
+            "id": "wolf_pelt",
+            "qty": 1
+          },
+          {
+            "id": "potion",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "frozen-grotto",
+      "name": "Frozen Grotto",
+      "theme": "ice / elemental",
+      "description": "Glittering caverns of ice and ancient frost magic. Cold damages some equipment; fire-based attacks shine here.",
+      "recommendedLevel": 4,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": {
+        "combat": 0.78,
+        "treasure": 0.10,
+        "rest": 0.08,
+        "special": 0.04
+      },
+      "enemyPool": {
+        "common": [
+          "ice-spirit"
+        ],
+        "uncommon": [
+          "ice-spirit",
+          "slime"
+        ],
+        "rare": [
+          "troll"
+        ]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 2,
+      "boss": {
+        "id": "ice-spirit",
+        "name": "Frost Guardian",
+        "notes": "Elemental boss—very weak to fire, immune/reduced to ice."
+      },
+      "lootHints": [
+        "frost_core",
+        "mana_leaf",
+        "potion"
+      ],
+      "clearRewards": {
+        "gold": 180,
+        "exp": 460,
+        "items": [
+          {
+            "id": "frost_core",
+            "qty": 1
+          },
+          {
+            "id": "mana_leaf",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "haunted-crypt",
+      "name": "Haunted Crypt",
+      "theme": "undead / necropolis",
+      "description": "Mausoleums and bone-lined halls. Skeletons and necromantic mages haunt the corridors; expect undead resistances and holy vulnerabilities.",
+      "recommendedLevel": 5,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": {
+        "combat": 0.82,
+        "treasure": 0.10,
+        "rest": 0.04,
+        "special": 0.04
+      },
+      "enemyPool": {
+        "common": [
+          "skeleton",
+          "mage_skeleton"
+        ],
+        "uncommon": [
+          "skeleton",
+          "mage_skeleton",
+          "specter"
+        ],
+        "rare": []
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": {
+        "id": "specter",
+        "name": "Crypt Specter",
+        "notes": "Ethereal foe with high magic defense; sacred/holy attacks are most effective."
+      },
+      "lootHints": [
+        "bone_shard",
+        "ectoplasm",
+        "mana_leaf"
+      ],
+      "clearRewards": {
+        "gold": 220,
+        "exp": 520,
+        "items": [
+          {
+            "id": "bone_shard",
+            "qty": 2
+          },
+          {
+            "id": "ectoplasm",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "fire-embers",
+      "name": "Fire Embers",
+      "theme": "ruins / fire element",
+      "description": "Ruins warmed by volcanic fissures. Fire imps skitter through the ash—beware groups and burning hazards.",
+      "recommendedLevel": 3,
+      "size": 2,
+      "tileCount": 4,
+      "tileTypes": {
+        "combat": 0.80,
+        "treasure": 0.12,
+        "rest": 0.06,
+        "special": 0.02
+      },
+      "enemyPool": {
+        "common": [
+          "fire-imp",
+          "goblin"
+        ],
+        "uncommon": [
+          "fire-imp",
+          "goblin",
+          "orc"
+        ],
+        "rare": []
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 2,
+      "boss": {
+        "id": "fire-imp",
+        "name": "Scorch Imp Trio",
+        "notes": "Clustered elemental boss fight (multiple imps acting as a single encounter)."
+      },
+      "lootHints": [
+        "ember_fragment",
+        "potion"
+      ],
+      "clearRewards": {
+        "gold": 160,
+        "exp": 400,
+        "items": [
+          {
+            "id": "ember_fragment",
+            "qty": 2
+          },
+          {
+            "id": "potion",
+            "qty": 1
+          }
+        ]
+      }
+    }
+  ]
+}

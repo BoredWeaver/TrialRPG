@@ -1,0 +1,676 @@
+{
+  "goblin": {
+    "name": "Goblin",
+    "maxHP": 18,
+    "atk": 12,
+    "mAtk": 4,
+    "def": 1,
+    "mDef": 1,
+    "expReward": 4000,
+    "element": "physical",
+    "elementMods": {
+      "fire": 1.2,
+      "ice": 0.8
+    },
+    "drops": [{ "id": "potion", "qty": 1 }],
+    "spells": ["multi-shot"]
+  },
+  "goblin-archer": {
+    "name": "Goblin Archer",
+    "maxHP": 22,
+    "atk": 14,
+    "mAtk": 6,
+    "def": 1,
+    "mDef": 1,
+    "expReward": 55,
+    "element": "physical",
+    "elementMods": { "fire": 1.1, "ice": 0.9 },
+    "drops": [{ "id": "arrow_bundle", "qty": 1 }],
+    "spells": ["piercing-shot"]
+  },
+  "goblin-brute": {
+    "name": "Goblin Brute",
+    "maxHP": 40,
+    "atk": 20,
+    "mAtk": 3,
+    "def": 3,
+    "mDef": 1,
+    "expReward": 110,
+    "element": "physical",
+    "elementMods": { "fire": 1.0, "ice": 0.95 },
+    "drops": [{ "id": "orc_tooth", "qty": 1 }],
+    "spells": ["cleave"]
+  },
+  "goblin-king": {
+    "name": "Goblin King",
+    "maxHP": 480,
+    "atk": 18,
+    "mAtk": 6,
+    "def": 5,
+    "mDef": 3,
+    "expReward": 4200,
+    "element": "physical",
+    "elementMods": {
+      "fire": 1.0,
+      "ice": 0.9
+    },
+    "drops": [
+      { "id": "king_crown", "qty": 1 },
+      { "id": "potion", "qty": 2 }
+    ],
+    "spells": ["war-cry", "multi-shot"],
+    "boss": true,
+    "notes": "High HP boss — moderate single-target damage, summons minions occasionally."
+  },
+
+  "slime": {
+    "name": "Slime",
+    "maxHP": 22,
+    "atk": 4,
+    "mAtk": 8,
+    "def": 0,
+    "mDef": 1,
+    "expReward": 35,
+    "element": "water",
+    "elementMods": {
+      "fire": 1.5,
+      "ice": 0.5,
+      "poison": 0
+    },
+    "drops": [{ "id": "slime_gel", "qty": 1 }],
+    "spells": ["poison-cloud"]
+  },
+  "slime-large": {
+    "name": "Large Slime",
+    "maxHP": 70,
+    "atk": 10,
+    "mAtk": 14,
+    "def": 2,
+    "mDef": 3,
+    "expReward": 160,
+    "element": "water",
+    "elementMods": { "fire": 2.0, "ice": 0.6, "poison": 0 },
+    "drops": [{ "id": "slime_core", "qty": 1 }],
+    "spells": ["acid-splash", "split"]
+  },
+  "slime-queen": {
+    "name": "Slime Queen",
+    "maxHP": 600,
+    "atk": 20,
+    "mAtk": 28,
+    "def": 6,
+    "mDef": 8,
+    "expReward": 5200,
+    "element": "water",
+    "elementMods": { "fire": 2.2, "ice": 0.5, "poison": 0 },
+    "drops": [{ "id": "slime_gel", "qty": 5 }, { "id": "queen_jelly", "qty": 1 }],
+    "spells": ["poison-cloud", "gel-burst", "regenerate"],
+    "boss": true,
+    "notes": "AOE & split mechanics — spawns small slimes when damaged."
+  },
+
+  "wolf": {
+    "name": "Wolf",
+    "maxHP": 26,
+    "atk": 9,
+    "mAtk": 3,
+    "def": 1,
+    "mDef": 0,
+    "expReward": 55,
+    "element": "beast",
+    "elementMods": {
+      "fire": 1.3,
+      "ice": 0.7
+    },
+    "drops": [{ "id": "wolf_pelt", "qty": 1 }],
+    "spells": []
+  },
+  "dire-wolf": {
+    "name": "Dire Wolf",
+    "maxHP": 120,
+    "atk": 28,
+    "mAtk": 6,
+    "def": 4,
+    "mDef": 1,
+    "expReward": 420,
+    "element": "beast",
+    "elementMods": { "fire": 1.4, "ice": 0.6 },
+    "drops": [{ "id": "dire_pelt", "qty": 1 }],
+    "spells": ["feral-lunge"],
+    "notes": "Fast single-target burst damage and 'pack' mechanics."
+  },
+
+  "bandit": {
+    "name": "Bandit",
+    "maxHP": 28,
+    "atk": 13,
+    "mAtk": 3,
+    "def": 2,
+    "mDef": 1,
+    "expReward": 60,
+    "element": "physical",
+    "elementMods": { "fire": 1.1, "ice": 0.9 },
+    "drops": [{ "id": "coin_pouch", "qty": 1 }],
+    "spells": ["steal"]
+  },
+  "bandit-leader": {
+    "name": "Bandit Leader",
+    "maxHP": 260,
+    "atk": 36,
+    "mAtk": 8,
+    "def": 6,
+    "mDef": 3,
+    "expReward": 2000,
+    "element": "physical",
+    "elementMods": { "fire": 1.0, "ice": 1.0 },
+    "drops": [{ "id": "leader_bandana", "qty": 1 }, { "id": "coin_pouch", "qty": 3 }],
+    "spells": ["overhead-slash", "feint"],
+    "boss": true,
+    "notes": "High single-target damage and evasion; may call reinforcements."
+  },
+
+  "bat": {
+    "name": "Cave Bat",
+    "maxHP": 14,
+    "atk": 5,
+    "mAtk": 9,
+    "def": 0,
+    "mDef": 0,
+    "expReward": 28,
+    "element": "dark",
+    "elementMods": {
+      "holy": 1.5,
+      "fire": 0.8
+    },
+    "drops": [{ "id": "bat_wing", "qty": 1 }],
+    "spells": ["dark-orb"]
+  },
+  "harpy": {
+    "name": "Harpy",
+    "maxHP": 36,
+    "atk": 16,
+    "mAtk": 10,
+    "def": 2,
+    "mDef": 2,
+    "expReward": 140,
+    "element": "wind",
+    "elementMods": { "ice": 1.1, "fire": 0.9 },
+    "drops": [{ "id": "feather", "qty": 2 }],
+    "spells": ["wind-screech", "talon-strike"]
+  },
+
+  "orc": {
+    "name": "Orc",
+    "maxHP": 40,
+    "atk": 11,
+    "mAtk": 4,
+    "def": 2,
+    "mDef": 1,
+    "expReward": 80,
+    "element": "physical",
+    "elementMods": {
+      "ice": 1.3,
+      "fire": 0.7
+    },
+    "drops": [
+      { "id": "potion", "qty": 1 },
+      { "id": "orc_tooth", "qty": 1 }
+    ],
+    "spells": ["rock-shot"]
+  },
+  "orc-chieftain": {
+    "name": "Orc Chieftain",
+    "maxHP": 820,
+    "atk": 46,
+    "mAtk": 10,
+    "def": 12,
+    "mDef": 6,
+    "expReward": 9800,
+    "element": "physical",
+    "elementMods": { "fire": 0.9, "ice": 1.1 },
+    "drops": [{ "id": "chieftain_tag", "qty": 1 }],
+    "spells": ["war-cry", "earth-shock"],
+    "boss": true,
+    "notes": "Heavy-hitting boss with defense aura; reduces party attack when alive."
+  },
+
+  "skeleton": {
+    "name": "Skeleton",
+    "maxHP": 30,
+    "atk": 8,
+    "mAtk": 7,
+    "def": 3,
+    "mDef": 0,
+    "expReward": 210,
+    "element": "undead",
+    "elementMods": {
+      "holy": 2.0,
+      "fire": 1.3,
+      "poison": 0,
+      "dark": 0.5
+    },
+    "drops": [{ "id": "bone_shard", "qty": 1 }],
+    "spells": ["dark-orb"]
+  },
+  "skeleton-archer": {
+    "name": "Skeleton Archer",
+    "maxHP": 40,
+    "atk": 10,
+    "mAtk": 10,
+    "def": 4,
+    "mDef": 1,
+    "expReward": 300,
+    "element": "undead",
+    "elementMods": { "holy": 2.0, "fire": 1.4, "dark": 0.5 },
+    "drops": [{ "id": "bone_shard", "qty": 1 }],
+    "spells": ["bone-arrow"]
+  },
+  "mage_skeleton": {
+    "name": "Skeleton Mage",
+    "maxHP": 22,
+    "atk": 5,
+    "mAtk": 16,
+    "def": 1,
+    "mDef": 3,
+    "expReward": 85,
+    "element": "undead",
+    "elementMods": {
+      "holy": 2.0,
+      "fire": 1.5,
+      "lightning": 1.3,
+      "poison": 0,
+      "dark": 0.5
+    },
+    "drops": [
+      { "id": "bone_shard", "qty": 1 },
+      { "id": "mana_leaf", "qty": 1 }
+    ],
+    "spells": ["firebolt", "ice-spike", "heal"]
+  },
+  "lich-apprentice": {
+    "name": "Lich Apprentice",
+    "maxHP": 240,
+    "atk": 12,
+    "mAtk": 48,
+    "def": 6,
+    "mDef": 12,
+    "expReward": 3200,
+    "element": "dark",
+    "elementMods": { "holy": 3.0, "fire": 1.5 },
+    "drops": [{ "id": "lich_fragment", "qty": 1 }],
+    "spells": ["dark-orb", "shadow-bolt", "life-drain"]
+  },
+  "lich-king": {
+    "name": "Lich King",
+    "maxHP": 1400,
+    "atk": 30,
+    "mAtk": 90,
+    "def": 10,
+    "mDef": 26,
+    "expReward": 17500,
+    "element": "dark",
+    "elementMods": { "holy": 4.0, "fire": 1.8 },
+    "drops": [{ "id": "lich_heart", "qty": 1 }, { "id": "bone_shard", "qty": 10 }],
+    "spells": ["void-blast", "summon-skeletons", "curse"],
+    "boss": true,
+    "notes": "High magic boss with summons and curse mechanics."
+  },
+
+  "troll": {
+    "name": "Troll",
+    "maxHP": 75,
+    "atk": 14,
+    "mAtk": 6,
+    "def": 4,
+    "mDef": 2,
+    "expReward": 150,
+    "element": "beast",
+    "elementMods": {
+      "fire": 1.4,
+      "ice": 0.7,
+      "poison": 1.3
+    },
+    "drops": [{ "id": "troll_hide", "qty": 1 }],
+    "spells": ["rock-shot"]
+  },
+
+  "specter": {
+    "name": "Specter",
+    "maxHP": 20,
+    "atk": 6,
+    "mAtk": 14,
+    "def": 0,
+    "mDef": 5,
+    "expReward": 120,
+    "element": "dark",
+    "elementMods": {
+      "holy": 2.0,
+      "fire": 1.1,
+      "ice": 1.0,
+      "dark": 0.2
+    },
+    "drops": [{ "id": "ectoplasm", "qty": 1 }],
+    "spells": ["dark-orb", "poison-cloud"]
+  },
+  "wraith-lord": {
+    "name": "Wraith Lord",
+    "maxHP": 560,
+    "atk": 24,
+    "mAtk": 46,
+    "def": 6,
+    "mDef": 20,
+    "expReward": 7600,
+    "element": "dark",
+    "elementMods": { "holy": 3.5, "fire": 1.2 },
+    "drops": [{ "id": "ectoplasm", "qty": 5 }],
+    "spells": ["phase-strike", "spectral-wave", "drain"],
+    "boss": true,
+    "notes": "AOE magic and life-drain; resists physical."
+  },
+
+  "ice-spirit": {
+    "name": "Ice Spirit",
+    "maxHP": 24,
+    "atk": 10,
+    "mAtk": 18,
+    "def": 5,
+    "mDef": 4,
+    "expReward": 90,
+    "element": "ice",
+    "elementMods": {
+      "fire": 1.5,
+      "ice": 0,
+      "lightning": 1.2
+    },
+    "drops": [{ "id": "frost_core", "qty": 1 }],
+    "spells": ["ice-spike", "freeze"]
+  },
+  "frost-giant": {
+    "name": "Frost Giant",
+    "maxHP": 980,
+    "atk": 50,
+    "mAtk": 18,
+    "def": 20,
+    "mDef": 12,
+    "expReward": 12000,
+    "element": "ice",
+    "elementMods": { "fire": 2.5, "ice": 0.2 },
+    "drops": [{ "id": "giant_tooth", "qty": 1 }, { "id": "frost_core", "qty": 3 }],
+    "spells": ["glacial-smash", "ice-spike"],
+    "boss": true,
+    "notes": "Huge physical presence; high defense and AOE freeze chance."
+  },
+  "ice-wyrm": {
+    "name": "Ice Wyrm",
+    "maxHP": 720,
+    "atk": 46,
+    "mAtk": 34,
+    "def": 14,
+    "mDef": 10,
+    "expReward": 9800,
+    "element": "ice",
+    "elementMods": { "fire": 3.0, "ice": 0.1, "lightning": 1.2 },
+    "drops": [{ "id": "wyrm_scale", "qty": 3 }],
+    "spells": ["frost-breath", "tail-sweep"],
+    "boss": true,
+    "notes": "Breath AOE and tail knockback mechanics."
+  },
+
+  "fire-imp": {
+    "name": "Fire Imp",
+    "maxHP": 20,
+    "atk": 24,
+    "mAtk": 20,
+    "def": 1,
+    "mDef": 2,
+    "expReward": 85,
+    "element": "fire",
+    "elementMods": {
+      "ice": 1.5,
+      "fire": 0,
+      "water": 1.3
+    },
+    "drops": [{ "id": "ember_fragment", "qty": 1 }],
+    "spells": ["firebolt", "burn"]
+  },
+  "magma-elemental": {
+    "name": "Magma Elemental",
+    "maxHP": 440,
+    "atk": 34,
+    "mAtk": 40,
+    "def": 10,
+    "mDef": 14,
+    "expReward": 6400,
+    "element": "fire",
+    "elementMods": { "ice": 3.0, "water": 1.5 },
+    "drops": [{ "id": "magma_core", "qty": 1 }],
+    "spells": ["lava-burst", "ash-field"],
+    "notes": "Damaging ground effect and strong magic bursts."
+  },
+  "flame-sovereign": {
+    "name": "Flame Sovereign",
+    "maxHP": 1800,
+    "atk": 72,
+    "mAtk": 84,
+    "def": 26,
+    "mDef": 28,
+    "expReward": 28000,
+    "element": "fire",
+    "elementMods": { "ice": 4.0, "water": 2.0 },
+    "drops": [{ "id": "sovereign_flame", "qty": 1 }, { "id": "ember_fragment", "qty": 10 }],
+    "spells": ["inferno", "magma-wave", "flame-aura"],
+    "boss": true,
+    "notes": "Extreme AOE and persistent burn auras; designed as region end-boss."
+  },
+
+  "sea-serpent": {
+    "name": "Sea Serpent",
+    "maxHP": 55,
+    "atk": 11,
+    "mAtk": 14,
+    "def": 2,
+    "mDef": 3,
+    "expReward": 140,
+    "element": "water",
+    "elementMods": {
+      "fire": 1.6,
+      "ice": 0.6,
+      "lightning": 1.8
+    },
+    "drops": [{ "id": "serpent_scale", "qty": 1 }],
+    "spells": ["water-bolt", "ice-spike", "poison-cloud"]
+  },
+  "coral-guardian": {
+    "name": "Coral Guardian",
+    "maxHP": 460,
+    "atk": 32,
+    "mAtk": 22,
+    "def": 16,
+    "mDef": 10,
+    "expReward": 5800,
+    "element": "water",
+    "elementMods": { "fire": 1.8, "lightning": 1.0, "ice": 0.7 },
+    "drops": [{ "id": "coral_shard", "qty": 3 }],
+    "spells": ["tidal-shield", "shell-smash"],
+    "notes": "High defense and self-heal near water."
+  },
+  "kraken": {
+    "name": "The Kraken",
+    "maxHP": 950,
+    "atk": 22,
+    "mAtk": 16,
+    "def": 6,
+    "mDef": 6,
+    "expReward": 8200,
+    "element": "water",
+    "elementMods": {
+      "fire": 1.6,
+      "ice": 0.8,
+      "lightning": 1.4
+    },
+    "drops": [
+      { "id": "kraken_tentacle", "qty": 1 },
+      { "id": "serpent_scale", "qty": 3 }
+    ],
+    "spells": ["tide-crush", "ink-cloud"],
+    "boss": true,
+    "notes": "High HP, normal damage; has an AOE tentacle slam and an ink cloud that reduces player accuracy."
+  },
+  "leviathan": {
+    "name": "Leviathan",
+    "maxHP": 2200,
+    "atk": 66,
+    "mAtk": 56,
+    "def": 34,
+    "mDef": 30,
+    "expReward": 43000,
+    "element": "water",
+    "elementMods": { "fire": 3.2, "ice": 1.0, "lightning": 2.5 },
+    "drops": [{ "id": "leviathan_scale", "qty": 3 }, { "id": "ocean_heart", "qty": 1 }],
+    "spells": ["tsunami", "electric-storm", "maw-bite"],
+    "boss": true,
+    "notes": "Massive end-tier boss: tidal AOE, lightning phases, and a devour mechanic."
+  },
+
+  "sea-wraith": {
+    "name": "Sea Wraith",
+    "maxHP": 180,
+    "atk": 14,
+    "mAtk": 38,
+    "def": 4,
+    "mDef": 12,
+    "expReward": 2200,
+    "element": "water",
+    "elementMods": { "fire": 2.0, "ice": 1.2 },
+    "drops": [{ "id": "ectoplasm", "qty": 2 }],
+    "spells": ["drown", "spectral-wave"]
+  },
+
+  "stone-golem": {
+    "name": "Stone Golem",
+    "maxHP": 1200,
+    "atk": 28,
+    "mAtk": 0,
+    "def": 12,
+    "mDef": 8,
+    "expReward": 9000,
+    "element": "earth",
+    "elementMods": {
+      "fire": 0.9,
+      "lightning": 1.1
+    },
+    "drops": [
+      { "id": "golem_core", "qty": 1 },
+      { "id": "stone_fragment", "qty": 3 }
+    ],
+    "spells": ["smash", "ground-slam"],
+    "boss": true,
+    "notes": "Very high HP and heavy defense; damage is normal for its tier but hits hard if not mitigated."
+  },
+  "earth-titan": {
+    "name": "Earth Titan",
+    "maxHP": 2600,
+    "atk": 88,
+    "mAtk": 12,
+    "def": 50,
+    "mDef": 30,
+    "expReward": 56000,
+    "element": "earth",
+    "elementMods": { "lightning": 1.4, "water": 1.0 },
+    "drops": [{ "id": "titan_core", "qty": 1 }],
+    "spells": ["quake", "boulder-rain"],
+    "boss": true,
+    "notes": "Massive defense and AOE stagger — rewards heavy physical mitigation strategies."
+  },
+
+  "fire-drake": {
+    "name": "Fire Drake",
+    "maxHP": 620,
+    "atk": 56,
+    "mAtk": 46,
+    "def": 18,
+    "mDef": 12,
+    "expReward": 13600,
+    "element": "fire",
+    "elementMods": { "ice": 3.5, "water": 2.0 },
+    "drops": [{ "id": "drake_scale", "qty": 4 }],
+    "spells": ["flame-breath", "winggust"],
+    "boss": true,
+    "notes": "Flight phase: reduced chance to be hit by physical attacks and powerful breath AOE."
+  },
+
+  "shadow-stalker": {
+    "name": "Shadow Stalker",
+    "maxHP": 160,
+    "atk": 44,
+    "mAtk": 12,
+    "def": 6,
+    "mDef": 6,
+    "expReward": 3200,
+    "element": "dark",
+    "elementMods": { "holy": 3.0, "fire": 1.2 },
+    "drops": [{ "id": "stalker_claw", "qty": 1 }],
+    "spells": ["vanish", "backstab"],
+    "notes": "High single-target burst; often appears as an ambush enemy."
+  },
+
+  "banded-troll": {
+    "name": "Banded Troll",
+    "maxHP": 120,
+    "atk": 30,
+    "mAtk": 8,
+    "def": 8,
+    "mDef": 4,
+    "expReward": 900,
+    "element": "beast",
+    "elementMods": { "poison": 1.6, "fire": 1.1 },
+    "drops": [{ "id": "troll_hide", "qty": 2 }],
+    "spells": ["regenerate"]
+  },
+
+  "cinder-wyvern": {
+    "name": "Cinder Wyvern",
+    "maxHP": 980,
+    "atk": 64,
+    "mAtk": 60,
+    "def": 22,
+    "mDef": 18,
+    "expReward": 22000,
+    "element": "fire",
+    "elementMods": { "ice": 4.0, "water": 2.2 },
+    "drops": [{ "id": "wyvern_scale", "qty": 3 }],
+    "spells": ["ember-storm", "tail-flame"],
+    "boss": true,
+    "notes": "Mix of high physical and magic damage; fire-immune phases."
+  },
+
+  "phantom-warden": {
+    "name": "Phantom Warden",
+    "maxHP": 420,
+    "atk": 26,
+    "mAtk": 46,
+    "def": 8,
+    "mDef": 22,
+    "expReward": 7200,
+    "element": "dark",
+    "elementMods": { "holy": 3.0, "ice": 1.1 },
+    "drops": [{ "id": "warden_token", "qty": 1 }],
+    "spells": ["phase-shield", "spectral-blast"],
+    "notes": "Defensive phantom that punishes physical attackers."
+  },
+
+  "scorched-golem": {
+    "name": "Scorched Golem",
+    "maxHP": 740,
+    "atk": 38,
+    "mAtk": 24,
+    "def": 28,
+    "mDef": 20,
+    "expReward": 12800,
+    "element": "fire",
+    "elementMods": { "ice": 3.0, "water": 1.8 },
+    "drops": [{ "id": "golem_core", "qty": 2 }],
+    "spells": ["lava-slam", "ember-spray"],
+    "notes": "Combines heavy defense with persistent burn."
+  }
+}

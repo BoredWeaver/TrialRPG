@@ -1,0 +1,192 @@
+{
+  "kill_goblins_2": {
+    "id": "kill_goblins_2",
+    "title": "Clearing the Meadow",
+    "desc": "The goblins have been harassing travellers. Kill 5 Goblins.",
+    "type": "kill",
+    "target": {
+      "enemyId": "goblin",
+      "qty": 5
+    },
+    "rewards": {
+      "gold": 80,
+      "exp": 60,
+      "items": [
+        {
+          "id": "potion",
+          "qty": 1
+        }
+      ]
+    },
+    "minLevel": 1
+  },
+  "collect_slime_gel_1": {
+    "id": "collect_slime_gel_1",
+    "title": "Slime Harvest",
+    "desc": "Gather 3 Slime Gel from defeated Slimes.",
+    "type": "collect",
+    "target": {
+      "itemId": "slime_gel",
+      "qty": 3
+    },
+    "rewards": {
+      "gold": 40,
+      "exp": 30
+    },
+    "minLevel": 1
+  },
+  "visit_outpost": {
+    "id": "visit_outpost",
+    "title": "Scout the Ruins",
+    "desc": "Travel to the Ruined Outpost and report back.",
+    "type": "visit",
+    "target": {
+      "locationId": "central-zone-3"
+    },
+    "rewards": {
+      "gold": 50,
+      "exp": 40
+    },
+    "minLevel": 2
+  },
+  "deliver_letter": {
+    "id": "deliver_letter",
+    "title": "Messenger Duty",
+    "desc": "Take this letter from Central City to Skyfall City.",
+    "type": "travel",
+    "target": {
+      "from": "central-city",
+      "to": "sky-city"
+    },
+    "rewards": {
+      "gold": 120,
+      "exp": 80
+    },
+    "minLevel": 3
+  },
+  
+    "clear_goblin_den": {
+      "id": "clear_goblin_den",
+      "title": "Purge the Den",
+      "desc": "Clear the Goblin Den of enemies and defeat its boss.",
+      "type": "clear_dungeon",
+      "target": {
+        "dungeonId": "goblin-den"
+      },
+      "rewards": {
+        "gold": 120,
+        "exp": 300,
+        "items": [
+          {
+            "id": "potion",
+            "qty": 2
+          }
+        ]
+      },
+      "minLevel": 1
+    },
+    "clear_slime_pond": {
+      "id": "clear_slime_pond",
+      "title": "Purify the Pond",
+      "desc": "Drive out the corrupted slimes and defeat the Bog Sea-Serpent boss.",
+      "type": "clear_dungeon",
+      "target": {
+        "dungeonId": "slime-pond"
+      },
+      "rewards": {
+        "gold": 160,
+        "exp": 380,
+        "items": [
+          {
+            "id": "slime_gel",
+            "qty": 3
+          }
+        ]
+      },
+      "minLevel": 2
+    },
+    "clear_howling_woods": {
+      "id": "clear_howling_woods",
+      "title": "Silence the Howls",
+      "desc": "Sweep the Howling Woods and bring down the Forest Troll boss.",
+      "type": "clear_dungeon",
+      "target": {
+        "dungeonId": "howling-woods"
+      },
+      "rewards": {
+        "gold": 220,
+        "exp": 460,
+        "items": [
+          {
+            "id": "wolf_pelt",
+            "qty": 2
+          }
+        ]
+      },
+      "minLevel": 3
+    },
+    "clear_frozen_grotto": {
+      "id": "clear_frozen_grotto",
+      "title": "Shatter the Frost",
+      "desc": "Clear the Frozen Grotto and defeat the Frost Guardian.",
+      "type": "clear_dungeon",
+      "target": {
+        "dungeonId": "frozen-grotto"
+      },
+      "rewards": {
+        "gold": 260,
+        "exp": 540,
+        "items": [
+          {
+            "id": "frost_core",
+            "qty": 1
+          }
+        ]
+      },
+      "minLevel": 4
+    },
+    "clear_haunted_crypt": {
+      "id": "clear_haunted_crypt",
+      "title": "Lay the Dead to Rest",
+      "desc": "Purge the Haunted Crypt of undead and defeat the Crypt Specter boss.",
+      "type": "clear_dungeon",
+      "target": {
+        "dungeonId": "haunted-crypt"
+      },
+      "rewards": {
+        "gold": 320,
+        "exp": 620,
+        "items": [
+          {
+            "id": "ectoplasm",
+            "qty": 1
+          },
+          {
+            "id": "bone_shard",
+            "qty": 2
+          }
+        ]
+      },
+      "minLevel": 5
+    },
+    "clear_fire_embers": {
+      "id": "clear_fire_embers",
+      "title": "Douse the Embers",
+      "desc": "Extinguish the volcanic ruins and defeat the Scorch Imp Trio.",
+      "type": "clear_dungeon",
+      "target": {
+        "dungeonId": "fire-embers"
+      },
+      "rewards": {
+        "gold": 200,
+        "exp": 420,
+        "items": [
+          {
+            "id": "ember_fragment",
+            "qty": 2
+          }
+        ]
+      },
+      "minLevel": 3
+    }
+  }

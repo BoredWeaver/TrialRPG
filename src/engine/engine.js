@@ -43,6 +43,15 @@ import {
 
 import { startUnitTurn } from "./turnStart.js";
 
+// Enemy builder & scaler (extracted)
+import {
+  parseScaledId,
+  setExpScalingMode,
+  setDungeonExpMultiplier,
+  scaleEnemyTemplate,
+  buildEnemyRuntimeFromSource,
+} from "./enemyBuilder.js";
+
 // ------------------------------------------------------------
 
 const ITEM_MAP = itemsCatalog;
@@ -90,92 +99,143 @@ function deepCloneFallback(obj) {
 }
 
 // ============================================================
-// Enemy building
+// Enemy building (delegated to enemyBuilder.js)
+// NOTE: engine now calls buildEnemyRuntimeFromSource(id, enemies)
 // ============================================================
-function buildEnemyRuntimeFromSource(enemyIdOrArray) {
-  const ids = Array.isArray(enemyIdOrArray) ? enemyIdOrArray.slice() : [enemyIdOrArray];
 
-  const list = ids.map((id) => {
-    // Normalize source:
-    // - if id is a string, lookup in enemies map (if available)
-    // - if id is an object, use it directly as a spec
-    // - otherwise, fallback to {}
-    let e = {};
-    try {
-      if (typeof id === "string") {
-        e = (typeof enemies === "object" && enemies && enemies[id]) ? enemies[id] : {};
-      } else if (id && typeof id === "object") {
-        e = id;
-      } else {
-        e = {};
-      }
-    } catch (err) {
-      e = {};
+// ============================================================
+// ENHANCEMENTS: summon helpers
+// ============================================================
+
+/**
+ * spawnSummonsMut(state, sourceEntity, summonSpec)
+ *
+ * summonSpec supports:
+ * - id: "goblin" or "goblin-lv4" or { baseId: "goblin", level: 4 }
+ * - count: number (default 1)
+ * - level: explicit level (optional) — if provided it overrides other heuristics
+ * - levelOffset: number (optional) — relative to sourceEntity._scaledLevel or player.level
+ *
+ * The spawned enemies are inserted into state.enemies and marked with _summon true,
+ * and have _summonOwner set to sourceEntity.id or sourceEntity.name so you can identify them.
+ */
+// ============================================================
+// SUMMON FIXED IMPLEMENTATION
+// ============================================================
+
+function resolveBaseLevelForSummon(state, sourceEntity) {
+  // Player summons => use player level
+  if (sourceEntity === state.player) {
+    return Number(state.player.level) || 1;
+  }
+
+  // Enemy summons
+  if (sourceEntity && Number.isFinite(Number(sourceEntity._scaledLevel))) {
+    return Number(sourceEntity._scaledLevel);
+  }
+
+  // Enemy with no scaling data (common) ⇒ treat as level 1
+  return 1;
+}
+
+function spawnSummonsMut(state, sourceEntity, summonSpec = {}) {
+  if (!state || !state.enemies) return [];
+
+  let count = Number(summonSpec.count) || 1;
+  let idOrObj = summonSpec.id || summonSpec.baseId || null;
+
+  if (!idOrObj && typeof summonSpec === "string") idOrObj = summonSpec;
+
+  // Fix: correct base-level logic
+  const baseLevel = resolveBaseLevelForSummon(state, sourceEntity);
+
+  let desiredLevel = undefined;
+
+  if (Number.isFinite(Number(summonSpec.level))) {
+    desiredLevel = Number(summonSpec.level);
+
+  } else if (Number.isFinite(Number(summonSpec.levelOffset))) {
+    desiredLevel = Math.max(1, baseLevel + Number(summonSpec.levelOffset));
+  }
+
+  const created = [];
+
+  for (let i = 0; i < count; i++) {
+    let spawnRef = idOrObj;
+
+    if (typeof spawnRef === "string" && desiredLevel) {
+      const parsed = parseScaledId(spawnRef);
+      if (!parsed) spawnRef = `${spawnRef}-lv${desiredLevel}`;
+    } else if (typeof spawnRef === "object" && desiredLevel) {
+      spawnRef = { ...spawnRef, level: desiredLevel };
     }
 
-    // spells should be an array of spell ids (keep as-is or empty)
-    const spells = Array.isArray(e.spells) ? e.spells.slice() : [];
+    const { enemies: built } = buildEnemyRuntimeFromSource(spawnRef, enemies);
+    if (!built || built.length === 0) continue;
 
-    const baseAtk = Number.isFinite(Number(e.atk)) ? Number(e.atk) : 1;
-    const baseDef = Number.isFinite(Number(e.def)) ? Number(e.def) : 0;
-    const baseMDef = Number.isFinite(Number(e.mDef))
-      ? Number(e.mDef)
-      : (Number.isFinite(Number(e.def)) ? Number(e.def) : 0);
-    // allow explicit mAtk on enemy, otherwise fall back to atk (makes sense for simple enemies)
-    const baseMAtk = Number.isFinite(Number(e.mAtk)) ? Number(e.mAtk) : baseAtk;
-    const baseMaxHP = Number.isFinite(Number(e.maxHP)) ? Number(e.maxHP) : 10;
-    const baseMaxMP = Number.isFinite(Number(e.maxMP)) ? Number(e.maxMP) : 0;
+    for (const n of built) {
+      n._summon = true;
+      n._summonOwner = sourceEntity ? (sourceEntity.id || sourceEntity.name || "unknown") : "unknown";
 
-    return {
-      id: id || null,
-      name: e.name || String(id || "Unknown"),
+      // Prevent re-acting in same turn
+      n._justSummoned = true;
 
-      // core combat values (current + max)
-      maxHP: baseMaxHP,
-      hp: baseMaxHP,
-      maxMP: baseMaxMP,
-      mp: baseMaxMP,
+      // Unique runtime ID
+      n.id = `${n.id || "summon"}-${Date.now()}-${(Math.random() * 1000) | 0}`;
 
-      // attack / defense
-      atk: baseAtk,
-      def: baseDef,
-      mAtk: baseMAtk,
-      mDef: baseMDef,
+      ensureRuntimeFieldsForEntity(n);
+      recomputeDerivedWithStatuses(n, state);
 
-      // spells (array of spell ids usable by enemy)
-      spells: spells,
+      state.enemies.push(n);
+      created.push(n);
+    }
+  }
 
-      expReward: Number.isFinite(Number(e.expReward)) ? Number(e.expReward) : 0,
-      element: e.element,
-      elementMods: e.elementMods ? { ...e.elementMods } : undefined,
-      drops: Array.isArray(e.drops) ? e.drops.map(d => ({ id: d.id, qty: Number(d.qty) || 0 })) : [],
-      _deathProcessed: false,
+  // Fix primary enemy reference (no more copying -> no desync)
+  state.enemy = state.enemies[0] || null;
 
-      // optional AI hints (keeps existing if present)
-      ai: e.ai || undefined,
-      spellWeights: Array.isArray(e.spellWeights) ? e.spellWeights.slice() : undefined,
+  return created;
+}
 
-      // runtime fields
-      statuses: [], // array of { id, type, value?, stat?, turnsLeft, source? }
-      _cooldowns: {},
+function processEffectForEntity(state, sourceEntity, effect) {
+  if (!effect || !effect.type) return;
 
-      // store base values so we can recompute derived values with buffs/debuffs
-      _base: {
-        atk: baseAtk,
-        def: baseDef,
-        mAtk: baseMAtk,
-        mDef: baseMDef,
-        maxHP: baseMaxHP,
-        maxMP: baseMaxMP,
-      },
+  if (effect.type === "summon") {
+    const spec = {
+      id: effect.id || effect.baseId,
+      count: Number(effect.count) || 1
     };
-  });
 
-  return { enemies: list, primary: list[0] || null };
+    if (Number.isFinite(Number(effect.level))) spec.level = Number(effect.level);
+    if (Number.isFinite(Number(effect.levelOffset))) spec.levelOffset = Number(effect.levelOffset);
+
+    const created = spawnSummonsMut(state, sourceEntity, spec);
+
+    if (created.length > 0) {
+      const names = created.map(c => c.name || c.id).join(", ");
+      addLog(state, `${sourceEntity?.name || "An entity"} summons ${created.length} × ${names}!`);
+
+      try {
+        emit("toast", {
+          message: `${sourceEntity?.name || "Enemy"} summoned ${created.length} minion(s).`,
+          type: "info"
+        });
+      } catch {}
+    }
+    return;
+  }
+
+  // otherwise: normal status
+  pushStatusOntoEntity(sourceEntity, effect);
 }
 
 
+// export spawn helper so enemyAI or other modules can call it directly
+export { spawnSummonsMut };
+
+// ============================================================
 // Enemy access utils
+// ============================================================
 function getEnemiesList(state) {
   if (Array.isArray(state.enemies) && state.enemies.length > 0) return state.enemies;
   if (state.enemy) return [state.enemy];
@@ -375,13 +435,10 @@ function grantExpAndMaybeLevelUp(state, amount) {
 // ============================================================
 export function startBattle(id = DEFAULT_ENEMY_ID) {
   const player = buildPlayerFromBase(playerBase);
-  const { enemies: runtimeEnemies, primary } = buildEnemyRuntimeFromSource(id);
+  // pass enemies DB into builder so it can resolve templates
+  const { enemies: runtimeEnemies, primary } = buildEnemyRuntimeFromSource(id, enemies);
 
-  for (const en of runtimeEnemies) {
-    ensureRuntimeFieldsForEntity(en);
-    recomputeDerivedWithStatuses(en);
-  }
-
+  // Build initial state first (so recomputeDerivedWithStatuses has state context)
   const state = {
     enemyId: Array.isArray(id) ? id[0] : id,
     player,
@@ -396,6 +453,12 @@ export function startBattle(id = DEFAULT_ENEMY_ID) {
     deriveFromStats: deriveCombatFromStats,
     applyEquipmentToDerived,
   };
+
+  // Ensure runtime fields and recompute derived with full state context
+  for (const en of state.enemies) {
+    ensureRuntimeFieldsForEntity(en);
+    recomputeDerivedWithStatuses(en, state);
+  }
 
   // Initial player turn start
   const after = startUnitTurn(state, "player");
@@ -540,12 +603,21 @@ export function playerCast(state, spellId, targetIndex = null) {
           );
         }
 
-        // Effects
+        // Effects (special-case 'summon')
         if (Array.isArray(spell.effects)) {
           for (const eff of spell.effects) {
-            pushStatusOntoEntity(en, { ...eff, source: spell.id || spellId });
+            // for AOE spells, treat source as s.player and process effect
+            if (eff && eff.type === "summon") {
+              processEffectForEntity(s, s.player, eff);
+            } else {
+              // Normal status effects are pushed onto the target entity
+              pushStatusOntoEntity(en, { ...eff, source: spell.id || spellId });
+            }
           }
-          recomputeDerivedWithStatuses(en, s);
+          // Recompute derived for enemies since statuses / summons may have changed the battlefield
+          for (const en2 of enemiesList) {
+            recomputeDerivedWithStatuses(en2, s);
+          }
         }
 
         if (prev > 0 && en.hp <= 0) onEnemyDeathMut(s, en);
@@ -593,9 +665,14 @@ export function playerCast(state, spellId, targetIndex = null) {
 
       if (Array.isArray(spell.effects)) {
         for (const eff of spell.effects) {
-          pushStatusOntoEntity(target, { ...eff, source: spell.id || spellId });
+          // If effect is summon handle it (summons don't attach to the target)
+          if (eff && eff.type === "summon") {
+            processEffectForEntity(s, s.player, eff);
+          } else {
+            pushStatusOntoEntity(target, { ...eff, source: spell.id || spellId });
+            recomputeDerivedWithStatuses(target, s);
+          }
         }
-        recomputeDerivedWithStatuses(target, s);
       }
 
       if (prev > 0 && target.hp <= 0) onEnemyDeathMut(s, target);
@@ -616,7 +693,12 @@ export function playerCast(state, spellId, targetIndex = null) {
 
     if (Array.isArray(spell.effects)) {
       for (const eff of spell.effects) {
-        pushStatusOntoEntity(s.player, { ...eff, source: spell.id || spellId });
+        // Summon effect on heal (rare) — treat as originating from player
+        if (eff && eff.type === "summon") {
+          processEffectForEntity(s, s.player, eff);
+        } else {
+          pushStatusOntoEntity(s.player, { ...eff, source: spell.id || spellId });
+        }
       }
       recomputeDerivedWithStatuses(s.player, s);
     }
@@ -715,7 +797,12 @@ export function playerUseItem(state, itemId, targetIndex = null) {
 
         if (Array.isArray(spec.effects)) {
           for (const eff of spec.effects) {
-            pushStatusOntoEntity(en, { ...eff, source: spec.id || itemId });
+            // Support summon effects on items too
+            if (eff && eff.type === "summon") {
+              processEffectForEntity(s, s.player, eff);
+            } else {
+              pushStatusOntoEntity(en, { ...eff, source: spec.id || itemId });
+            }
           }
           recomputeDerivedWithStatuses(en, s);
         }
@@ -763,7 +850,11 @@ export function playerUseItem(state, itemId, targetIndex = null) {
 
       if (Array.isArray(spec.effects)) {
         for (const eff of spec.effects) {
-          pushStatusOntoEntity(target, { ...eff, source: spec.id || itemId });
+          if (eff && eff.type === "summon") {
+            processEffectForEntity(s, s.player, eff);
+          } else {
+            pushStatusOntoEntity(target, { ...eff, source: spec.id || itemId });
+          }
         }
         recomputeDerivedWithStatuses(target, s);
       }
@@ -881,11 +972,20 @@ function onEnemyDeathMut(state, enemy) {
 
   addLog(state, `${enemy.name} falls!`);
 
+  // EXP
   const exp = enemy.expReward || 0;
   if (exp > 0) {
     grantExpAndMaybeLevelUp(state, exp);
+
+    try {
+      emit("toast", {
+        message: `+${exp} EXP`,
+        type: "success"
+      });
+    } catch {}
   }
 
+  // LOOT
   if (Array.isArray(enemy.drops)) {
     for (const d of enemy.drops) {
       if (!d || !d.id) continue;
@@ -895,15 +995,22 @@ function onEnemyDeathMut(state, enemy) {
 
       try {
         emit("collect", { itemId: d.id, qty });
-      } catch { }
+      } catch {}
 
       state.player.items = state.player.items || {};
       state.player.items[d.id] = (state.player.items[d.id] || 0) + qty;
 
-      addLog(
-        state,
-        `${enemy.name} dropped ${qty} × ${ITEM_MAP[d.id]?.name || d.id}.`
-      );
+      const itemName = ITEM_MAP[d.id]?.name || d.id;
+
+      addLog(state, `${enemy.name} dropped ${qty} × ${itemName}.`);
+
+      // --- NEW TOAST HERE ---
+      try {
+        emit("toast", {
+          message: `Loot: ${qty}× ${itemName}`,
+          type: "info"
+        });
+      } catch {}
     }
   }
 }
@@ -1042,3 +1149,8 @@ export function allocateStat(state, statKey) {
   addLog(s, `Allocated +1 ${statKey}.`);
   return s;
 }
+
+// ============================================================
+// Export scaling setters for external use (re-export from enemyBuilder)
+// ============================================================
+export { setExpScalingMode, setDungeonExpMultiplier };

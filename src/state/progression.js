@@ -22,10 +22,12 @@ export function calculateExpToNextLevel(level) {
    etc.
    ============================================================ */
 const SPELL_CHOICE_TABLE = {
+  2:["firebolt","multi-shot"],
   5: ["ice_spike", "rock_shot"],
   10: ["freeze", "dark_orb"],
   15: ["burn", "freeze"],
   20: ["shield", "thunderbolt"],
+  27: ["summon-skeletons", "split"],
 };
 
 /* ============================================================

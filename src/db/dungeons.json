@@ -6,8 +6,8 @@
       "theme": "cavern / bandit lair",
       "description": "A cramped network of tunnels infested with goblins, scout bats and the occasional goblin shaman. Expect many small skirmishes and quick, low-reward drops.",
       "recommendedLevel": 1,
-      "size": 5,
-      "tileCount": 25,
+      "size": 3,
+      "tileCount": 9,
       "tileTypes": {
         "combat": 0.80,
         "treasure": 0.10,
@@ -267,7 +267,7 @@
       "name": "Fire Embers",
       "theme": "ruins / fire element",
       "description": "Ruins warmed by volcanic fissures. Fire imps skitter through the ash—beware groups and burning hazards.",
-      "recommendedLevel": 3,
+      "recommendedLevel": 20,
       "size": 2,
       "tileCount": 4,
       "tileTypes": {
