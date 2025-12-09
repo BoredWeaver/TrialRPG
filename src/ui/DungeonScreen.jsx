@@ -175,9 +175,13 @@ export default function DungeonScreen() {
     }
 
     activeBattleRef.current = { tileIndex };
-
+    console.log("RUN",run);
+    // pass dungeonLevel from run if present so enemyBuilder can scale appropriately
+    const dungeonLevel = run?.dungeonLevel ?? run?.level;
+    console.log("DungeonScreen",dungeonLevel)
     battle.startWithEnemy(payload.enemies, payload.playerOverrides || null, {
       meta: { tileIndex },
+      dungeonLevel,
       onFinish: (finalState, meta) => {
         const expected = activeBattleRef.current;
         const idx = meta?.tileIndex;
@@ -288,8 +292,12 @@ export default function DungeonScreen() {
     try { lockTileDuringBattle(centerIdx); } catch (_) { }
     activeBattleRef.current = { tileIndex: centerIdx, isBoss: true };
     if (!battle || typeof battle.startWithEnemy !== "function") return;
+
+    const dungeonLevel = run?.dungeonLevel ?? run?.level;
+
     battle.startWithEnemy(payload.enemies, payload.playerOverrides || null, {
       meta: { boss: true, tileIndex: centerIdx },
+      dungeonLevel,
       onFinish: (finalState, meta) => {
         const idx = meta?.tileIndex;
         activeBattleRef.current = null;

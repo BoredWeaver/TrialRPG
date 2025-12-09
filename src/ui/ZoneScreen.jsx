@@ -7,6 +7,9 @@ import { useBattleContext } from "../state/BattleContext.jsx";
 import usePlayerProgress from "../state/usePlayerProgress.js";
 import useDungeon from "../state/useDungeon.js";
 
+// icons
+import { ArrowLeft, Skull, DoorOpen, Users, Zap, Play } from "lucide-react";
+
 /**
  * Zone screen (presentation-only)
  * - Dark fantasy styling, mobile-first
@@ -27,13 +30,18 @@ export default function ZoneScreen() {
 
   if (!loc) {
     return (
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-100">Unknown zone</h3>
+      <div className="p-4 min-h-[40vh]">
+        <h3 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
+          <Skull className="w-5 h-5 text-rose-400" />
+          Unknown zone
+        </h3>
         <div className="mt-3">
           <button
-            className="px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600"
             onClick={() => navigate(-1)}
+            aria-label="Back"
           >
+            <ArrowLeft className="w-4 h-4" />
             Back
           </button>
         </div>
@@ -72,51 +80,70 @@ export default function ZoneScreen() {
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-100">{loc.name}</h3>
+        <h3 className="text-lg font-semibold text-gray-100 flex items-center gap-3 truncate">
+          <Users className="w-5 h-5 text-sky-400" />
+          <span className="truncate">{loc.name}</span>
+        </h3>
+
         <div>
           <button
-            className="px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600"
             onClick={() => navigate(-1)}
+            aria-label="Back"
+            title="Back"
           >
-            Back
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Back</span>
           </button>
         </div>
       </div>
 
       <div className="mt-3 text-sm text-gray-400">
-        Kind: <span className="font-medium text-gray-200">{loc.kind}</span> • Recommended: <span className="font-medium text-gray-200">Lv {loc.minLevel ?? 1}</span>
+        Kind: <span className="font-medium text-gray-200">{loc.kind}</span> • Recommended:{" "}
+        <span className="font-medium text-gray-200">Lv {loc.minLevel ?? 1}</span>
       </div>
 
       <section className="mt-6">
-        <h4 className="text-md font-semibold text-gray-100">Encounters</h4>
+        <h4 className="text-md font-semibold text-gray-100 flex items-center gap-2">
+          <Skull className="w-4 h-4 text-rose-300" />
+          Encounters
+        </h4>
 
         {Array.isArray(loc.enemies) && loc.enemies.length > 0 ? (
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {loc.enemies.map((eid, idx) => {
               const meta = ENEMIES[eid] || { name: eid };
               return (
-                <div key={`${eid}-${idx}`} className="p-3 rounded-lg fantasy-border bg-panel-800">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="font-semibold text-gray-100">{meta.name}</div>
-                      <div className="text-xs text-gray-400 mt-1">id: {eid}</div>
+                <div
+                  key={`${eid}-${idx}`}
+                  className="p-3 rounded-lg border border-[#1c232c] bg-[#071018]/60 backdrop-blur-sm shadow-sm flex flex-col"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <div className="font-semibold text-gray-100 truncate">{meta.name}</div>
+                      <div className="text-xs text-gray-400 mt-1 truncate">id: {eid}</div>
                     </div>
-                    <div className="text-sm text-gray-400">x{1}</div>
+
+                    <div className="text-sm text-gray-400">x1</div>
                   </div>
 
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={() => startBattleWith(eid)}
-                      className="px-3 py-2 rounded-md bg-indigo-900 text-indigo-100 font-medium border border-indigo-700 flex-1"
+                      className="flex-1 px-3 py-2 rounded-md bg-indigo-900 text-indigo-100 font-medium border border-indigo-700 inline-flex items-center justify-center gap-2"
+                      title={`Fight ${meta.name}`}
                     >
-                      Fight
+                      <Zap className="w-4 h-4" />
+                      <span>Fight</span>
                     </button>
 
                     <button
                       onClick={() => startBattleWith([eid, eid])}
-                      className="px-3 py-2 rounded-md bg-muted-700 text-gray-200 border border-muted-600"
+                      className="px-3 py-2 rounded-md bg-muted-700 text-gray-200 border border-muted-600 inline-flex items-center justify-center gap-2"
+                      title={`Fight x2 ${meta.name}`}
                     >
-                      Fight x2
+                      <Play className="w-4 h-4 transform rotate-90" />
+                      <span>Fight x2</span>
                     </button>
                   </div>
                 </div>
@@ -129,25 +156,31 @@ export default function ZoneScreen() {
       </section>
 
       <section className="mt-6">
-        <h4 className="text-md font-semibold text-gray-100">Dungeons</h4>
+        <h4 className="text-md font-semibold text-gray-100 flex items-center gap-2">
+          <DoorOpen className="w-4 h-4 text-amber-300" />
+          Dungeons
+        </h4>
 
         {Array.isArray(loc.dungeons) && loc.dungeons.length > 0 ? (
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {loc.dungeons.map((did) => (
-              <div key={did} className="p-3 rounded-lg fantasy-border bg-panel-800">
-                <div className="font-semibold text-gray-100">{did}</div>
+              <div
+                key={did}
+                className="p-3 rounded-lg border border-[#1c232c] bg-[#071018]/60 backdrop-blur-sm shadow-sm flex flex-col"
+              >
+                <div className="font-semibold text-gray-100 truncate">{did}</div>
                 <div className="text-xs text-gray-400 mt-1">Dungeon id</div>
 
                 <div className="mt-3 flex gap-2">
                   <button
-                    className="px-3 py-2 rounded-md fantasy-glow text-sm font-medium"
+                    className="px-3 py-2 rounded-md fantasy-glow text-sm font-medium inline-flex items-center gap-2 justify-center"
                     onClick={() => enterDungeon(did)}
+                    title={`Enter dungeon ${did}`}
                   >
+                    <DoorOpen className="w-4 h-4" />
                     Enter Dungeon
                   </button>
                 </div>
-
-               
               </div>
             ))}
           </div>

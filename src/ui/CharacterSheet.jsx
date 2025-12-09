@@ -8,6 +8,21 @@ import { equipItem, unequipItem } from "../state/equipment.js";
 import { commitChosenSpell } from "../state/progression.js";
 import itemsCatalog from "../db/items.json";
 
+// icons
+import {
+  X as XIcon,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+  Shield,
+  Heart,
+  Scroll,
+  Wrench,
+  Box,
+  Star,
+  User,
+} from "lucide-react";
+
 export default function CharacterSheet({ player: propPlayer, onClose, onAllocate }) {
   const { progress } = usePlayerProgress();
 
@@ -153,48 +168,88 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
         className="
           absolute inset-x-0 bottom-0 
           md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
-          w-full md:w-[600px] max-h-[90vh]
-          bg-[#0c0f17] text-gray-200 border border-[#1c232c]
+          w-full md:w-[680px] max-h-[90vh]
+          bg-[#071018] text-gray-200 border border-[#12151a]
           rounded-t-xl md:rounded-xl
           shadow-2xl overflow-y-auto
         "
       >
         {/* Header */}
-        <div className="p-4 border-b border-[#1a1f27] flex items-center justify-between">
-          <div>
-            <div className="text-xl font-bold">{player.name}</div>
-            <div className="text-sm text-gray-400">Level {level}</div>
+        <div className="p-4 border-b border-[#0e1114] flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-12 h-12 rounded-md bg-gradient-to-br from-slate-800 to-slate-700 flex items-center justify-center">
+              <User className="w-6 h-6 text-gray-100/90" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-lg font-bold truncate">{player.name}</div>
+              <div className="text-sm text-gray-400">Level {level}</div>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="text-sm text-gray-300">{player.gold} ✦</div>
-            <button className="px-3 py-1 rounded bg-[#1a1f27] border border-[#252b36]" onClick={onClose}>
-              Close
+            <div className="flex items-center gap-2 px-3 py-1 rounded bg-[#0b1115] border border-[#15181b]">
+              <Star className="w-4 h-4 text-amber-400" />
+              <span className="text-sm text-gray-200 font-semibold">{player.gold}</span>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#0b1115] border border-[#15181b] hover:bg-[#0f1519]"
+              aria-label="Close"
+              title="Close"
+            >
+              <XIcon className="w-4 h-4" />
+              <span className="hidden sm:inline text-sm">Close</span>
             </button>
           </div>
         </div>
 
         <div className="p-4 space-y-6">
-
-          {/* EXP BAR */}
-          <div>
-            <div className="flex justify-between text-sm mb-1">
-              <span className="font-medium">EXP</span>
-              <span className="text-gray-400">{player.exp}/{needExp} ({Math.round(expPct * 100)}%)</span>
+          {/* top stats row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+            <div className="col-span-1">
+              <div className="text-xs text-gray-400 mb-1">HP</div>
+              <div className="w-full h-3 bg-[#081018] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-200"
+                  style={{ width: `${(curHP / derived.maxHP) * 100}%`, background: "linear-gradient(90deg,#f87171,#ef4444)" }}
+                />
+              </div>
+              <div className="text-xs text-gray-300 mt-1">{curHP}/{derived.maxHP}</div>
             </div>
 
-            <div className="w-full h-2 bg-[#1b1f27] rounded-full">
-              <div
-                className="h-full bg-gradient-to-r from-indigo-400 to-fuchsia-500 rounded-full"
-                style={{ width: `${expPct * 100}%` }}
-              />
+            <div className="col-span-1">
+              <div className="text-xs text-gray-400 mb-1">MP</div>
+              <div className="w-full h-3 bg-[#081018] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-200"
+                  style={{ width: `${(curMP / derived.maxMP) * 100}%`, background: "linear-gradient(90deg,#60a5fa,#7c3aed)" }}
+                />
+              </div>
+              <div className="text-xs text-gray-300 mt-1">{curMP}/{derived.maxMP}</div>
+            </div>
+
+            <div className="col-span-1 text-right">
+              <div className="text-xs text-gray-400">EXP</div>
+              <div className="text-sm font-medium text-gray-200">{player.exp}/{needExp} ({Math.round(expPct * 100)}%)</div>
+              <div className="w-full h-2 bg-[#081018] rounded-full mt-2">
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${expPct * 100}%`, background: "linear-gradient(90deg,#60a5fa,#c084fc)" }}
+                />
+              </div>
             </div>
           </div>
 
           {/* SPELL CHOICE */}
           {player.pendingSpellChoices?.length > 0 && (
-            <div className="p-3 rounded-lg border border-blue-900 bg-blue-900/20">
-              <div className="font-semibold mb-2 text-blue-200">Choose a Spell</div>
+            <div className="p-3 rounded-lg border border-blue-900 bg-blue-900/8">
+              <div className="flex items-center justify-between mb-2">
+                <div className="font-semibold text-blue-200 flex items-center gap-2">
+                  <Scroll className="w-4 h-4 text-blue-300" />
+                  Choose a Spell
+                </div>
+              </div>
               {player.pendingSpellChoices.map((choice, idx) => (
                 <div key={idx} className="mb-2">
                   <div className="text-sm mb-1">Level {choice.level} Reward</div>
@@ -203,7 +258,7 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
                       <button
                         key={sp}
                         onClick={() => handleChooseSpell(choice.level, sp)}
-                        className="px-3 py-1 rounded bg-[#10141c] border border-[#1a2330]"
+                        className="px-3 py-1 rounded bg-[#081018] border border-[#11161b] text-sm"
                       >
                         {labelize(sp)}
                       </button>
@@ -216,48 +271,56 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
 
           {/* ATTRIBUTES */}
           <section>
-            <div className="flex justify-between mb-1">
-              <span className="font-semibold">Attributes</span>
-              <span className="text-sm text-gray-400">Unspent: {player.unspentPoints}</span>
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-semibold">Attributes</div>
+              <div className="text-sm text-gray-400">Unspent: {player.unspentPoints}</div>
             </div>
 
-            <div className="flex flex-wrap gap-4 text-sm">
-              {["STR","DEX","MAG","CON"].map((k) => (
-                <div key={k}>
-                  {k}: <strong>{stats[k]}</strong>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex gap-2 mt-2">
-              {["STR","DEX","MAG","CON"].map((k) => (
-                <button
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {["STR", "DEX", "MAG", "CON"].map((k) => (
+                <div
                   key={k}
-                  disabled={!canSpend}
-                  onClick={() => onAllocate(k)}
-                  className={`px-2 py-1 rounded text-sm ${
-                    canSpend
-                      ? "bg-green-700 hover:bg-green-600"
-                      : "bg-[#1a1f27] text-gray-500 cursor-not-allowed"
-                  }`}
+                  className="p-2 rounded border border-[#0f1518] bg-[#071018] text-sm flex items-center justify-between"
                 >
-                  + {k}
-                </button>
+                  <div className="flex items-center gap-2">
+                    {k === "STR" && <Wrench className="w-4 h-4 text-slate-300" />}
+                    {k === "DEX" && <Shield className="w-4 h-4 text-slate-300" />}
+                    {k === "MAG" && <Zap className="w-4 h-4 text-slate-300" />}
+                    {k === "CON" && <Heart className="w-4 h-4 text-slate-300" />}
+                    <div>{k}</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="font-semibold">{stats[k]}</div>
+                    <button
+                      disabled={!canSpend}
+                      onClick={() => onAllocate(k)}
+                      className={`px-2 py-0.5 rounded text-xs ${
+                        canSpend ? "bg-green-700 hover:bg-green-600" : "bg-[#0c1114] text-gray-500 cursor-not-allowed"
+                      }`}
+                      aria-label={`Allocate to ${k}`}
+                    >
+                      +{k}
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
 
           {/* COMBAT */}
           <section>
-            <div className="font-semibold mb-1">Combat</div>
+            <div className="font-semibold mb-2 flex items-center gap-2">
+              <Shield className="w-4 h-4 text-slate-300" />
+              Combat
+            </div>
 
-            <div className="flex flex-wrap gap-4 text-sm">
-              <div>ATK: <strong>{derived.atk}</strong></div>
-              <div>DEF: <strong>{derived.def}</strong></div>
-              <div>M-ATK: <strong>{derived.mAtk}</strong></div>
-              <div>M-DEF: <strong>{derived.mDef}</strong></div>
-              <div>HP: <strong>{curHP}/{derived.maxHP}</strong></div>
-              <div>MP: <strong>{curMP}/{derived.maxMP}</strong></div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+              <div className="p-2 rounded border border-[#0f1518] bg-[#071018]">ATK: <strong>{derived.atk}</strong></div>
+              <div className="p-2 rounded border border-[#0f1518] bg-[#071018]">DEF: <strong>{derived.def}</strong></div>
+              <div className="p-2 rounded border border-[#0f1518] bg-[#071018]">M-ATK: <strong>{derived.mAtk}</strong></div>
+              <div className="p-2 rounded border border-[#0f1518] bg-[#071018]">M-DEF: <strong>{derived.mDef}</strong></div>
+              <div className="p-2 rounded border border-[#0f1518] bg-[#071018]">HP: <strong>{curHP}/{derived.maxHP}</strong></div>
+              <div className="p-2 rounded border border-[#0f1518] bg-[#071018]">MP: <strong>{curMP}/{derived.maxMP}</strong></div>
             </div>
           </section>
 
@@ -265,33 +328,41 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
           <section>
             <button
               onClick={() => setEquipOpen(!isEquipOpen)}
-              className="flex justify-between w-full px-2 py-2 bg-[#10141c] border border-[#1c232c] rounded text-left"
+              className="flex justify-between w-full px-3 py-2 bg-[#081018] border border-[#0f1518] rounded text-left items-center"
+              aria-expanded={isEquipOpen}
             >
-              <span className="font-semibold">Equipment</span>
-              <span className="text-gray-400">{isEquipOpen ? "−" : "+"}</span>
+              <div className="flex items-center gap-2 font-semibold">
+                <Box className="w-4 h-4" />
+                Equipment
+              </div>
+              <div className="text-gray-400">
+                {isEquipOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </div>
             </button>
 
             {isEquipOpen && (
-              <div className="mt-2 space-y-3">
+              <div className="mt-3 space-y-3">
                 {slots.map((slot) => {
                   const eqId = player.equipped?.[slot];
                   const spec = eqId ? itemsCatalog[eqId] : null;
                   const options = equipableBySlot[slot] || [];
 
                   return (
-                    <div key={slot} className="p-2 rounded border bg-[#0d1118] border-[#1c232c] text-sm">
-                      <div className="text-xs text-gray-400">{slot.toUpperCase()}</div>
-                      <div className="font-medium mt-1">{spec?.name ?? "— Empty —"}</div>
+                    <div key={slot} className="p-2 rounded border bg-[#081018] border-[#0f1518] text-sm">
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs text-gray-400">{slot.toUpperCase()}</div>
+                        <div className="text-xs text-gray-300">{spec?.name ? "" : "Empty"}</div>
+                      </div>
+
+                      <div className="font-medium mt-1 truncate">{spec?.name ?? "— Empty —"}</div>
 
                       <div className="mt-2 flex gap-2">
                         {!spec ? (
                           <button
                             disabled={!options.length}
                             onClick={() => setOpenSlot(openSlot === slot ? null : slot)}
-                            className={`px-2 py-1 rounded border ${
-                              options.length
-                                ? "border-[#2c3544] bg-[#10141c]"
-                                : "bg-[#1a1f27] text-gray-500 cursor-not-allowed"
+                            className={`px-2 py-1 rounded border text-sm ${
+                              options.length ? "border-[#1b2430] bg-[#071018]" : "bg-[#0c1114] text-gray-500 cursor-not-allowed"
                             }`}
                           >
                             Equip
@@ -299,7 +370,7 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
                         ) : (
                           <button
                             onClick={() => handleUnequip(slot)}
-                            className="px-2 py-1 rounded border border-[#2c3544] bg-[#10141c]"
+                            className="px-2 py-1 rounded border border-[#1b2430] bg-[#071018] text-sm"
                           >
                             Unequip
                           </button>
@@ -312,14 +383,14 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
                             <button
                               key={o.id}
                               onClick={() => handleEquip(slot, o.id)}
-                              className="w-full px-2 py-1 rounded border border-[#2c3544] bg-[#10141c] text-left"
+                              className="w-full px-2 py-1 rounded border border-[#1b2430] bg-[#071018] text-left text-sm"
                             >
                               {o.name} ×{o.qty}
                             </button>
                           ))}
                           <button
                             onClick={() => setOpenSlot(null)}
-                            className="w-full px-2 py-1 rounded border border-[#2c3544] bg-[#10141c]"
+                            className="w-full px-2 py-1 rounded border border-[#1b2430] bg-[#071018] text-sm"
                           >
                             Cancel
                           </button>
@@ -336,23 +407,28 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
           <section>
             <button
               onClick={() => setInvOpen(!isInvOpen)}
-              className="flex justify-between w-full px-2 py-2 bg-[#10141c] border border-[#1c232c] rounded text-left"
+              className="flex justify-between w-full px-3 py-2 bg-[#081018] border border-[#0f1518] rounded text-left items-center"
+              aria-expanded={isInvOpen}
             >
-              <span className="font-semibold">Inventory</span>
-              <span className="text-gray-400">{isInvOpen ? "−" : "+"}</span>
+              <div className="flex items-center gap-2 font-semibold">
+                <Wrench className="w-4 h-4" />
+                Inventory
+              </div>
+              <div className="text-gray-400">{isInvOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}</div>
             </button>
 
             {isInvOpen && (
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {inventoryList.length === 0 ? (
                   <div className="text-sm text-gray-500">No items.</div>
                 ) : (
                   inventoryList.map((it) => (
                     <div
                       key={it.id}
-                      className="px-3 py-1 rounded-full border border-[#2c3544] bg-[#0d1118] text-sm"
+                      className="px-3 py-1 rounded-full border border-[#13202a] bg-[#071018] text-sm flex items-center gap-2"
                     >
-                      {labelize(it.id)} <span className="text-gray-400">×{it.qty}</span>
+                      <div className="text-xs text-gray-400">{labelize(it.id)}</div>
+                      <div className="text-gray-400">×{it.qty}</div>
                     </div>
                   ))
                 )}
@@ -362,7 +438,13 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
 
           {/* SPELL LIST */}
           <section>
-            <div className="font-semibold mb-1">Spells</div>
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-semibold flex items-center gap-2">
+                <Scroll className="w-4 h-4" />
+                Spells
+              </div>
+            </div>
+
             {player.spells.length === 0 ? (
               <div className="text-sm text-gray-500">No spells learned.</div>
             ) : (
@@ -370,9 +452,9 @@ export default function CharacterSheet({ player: propPlayer, onClose, onAllocate
                 {player.spells.map((s, i) => (
                   <div
                     key={i}
-                    className="px-3 py-1 rounded-full border border-[#2c3544] bg-[#0d1118] text-sm"
+                    className="px-3 py-1 rounded-full border border-[#13202a] bg-[#071018] text-sm flex items-center gap-2"
                   >
-                    {labelize(s)}
+                    <div className="text-sm">{labelize(s)}</div>
                   </div>
                 ))}
               </div>

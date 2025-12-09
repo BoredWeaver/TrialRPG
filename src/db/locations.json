@@ -22,8 +22,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 1,
-          "enemies": ["goblin", "slime", "wolf"],
-          "dungeons": ["goblin-den"]
+          "enemies": [
+            "goblin",
+            "slime",
+            "wolf"
+          ],
+          "dungeons": [
+            "goblin-den"
+          ]
         },
         {
           "id": "central-zone-2",
@@ -31,8 +37,15 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 2,
-          "enemies": ["bandit", "wolf", "slime"],
-          "dungeons": ["goblin-den", "slime-pond"]
+          "enemies": [
+            "bandit",
+            "wolf",
+            "slime"
+          ],
+          "dungeons": [
+            "goblin-den",
+            "slime-pond"
+          ]
         },
         {
           "id": "central-zone-3",
@@ -40,7 +53,11 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 4,
-          "enemies": ["orc", "bandit", "wolf"],
+          "enemies": [
+            "orc",
+            "bandit",
+            "wolf"
+          ],
           "dungeons": [
             "howling-woods",
             "goblin-den",
@@ -53,7 +70,10 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 6,
-          "enemies": ["orc", "troll"],
+          "enemies": [
+            "orc",
+            "troll"
+          ],
           "dungeons": [
             "howling-woods",
             "troll-stronghold",
@@ -62,7 +82,6 @@
         }
       ]
     },
-
     {
       "id": "sky",
       "name": "Sky Region",
@@ -85,8 +104,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 3,
-          "enemies": ["bandit", "goblin"],
-          "dungeons": ["howling-woods", "windbreaker-ruins"]
+          "enemies": [
+            "bandit",
+            "goblin"
+          ],
+          "dungeons": [
+            "howling-woods",
+            "windbreaker-ruins"
+          ]
         },
         {
           "id": "sky-zone-2",
@@ -94,8 +119,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 5,
-          "enemies": ["ice-spirit", "goblin"],
-          "dungeons": ["frozen-grotto", "frost-giant-hall"]
+          "enemies": [
+            "ice-spirit",
+            "goblin"
+          ],
+          "dungeons": [
+            "frozen-grotto",
+            "frost-giant-hall"
+          ]
         },
         {
           "id": "sky-zone-3",
@@ -103,8 +134,15 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 7,
-          "enemies": ["ice-spirit", "specter"],
-          "dungeons": ["frozen-grotto", "haunted-crypt", "frost-giant-hall"]
+          "enemies": [
+            "ice-spirit",
+            "specter"
+          ],
+          "dungeons": [
+            "frozen-grotto",
+            "haunted-crypt",
+            "frost-giant-hall"
+          ]
         },
         {
           "id": "sky-zone-4",
@@ -112,12 +150,17 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 9,
-          "enemies": ["specter", "troll"],
-          "dungeons": ["haunted-crypt", "lich-keep"]
+          "enemies": [
+            "specter",
+            "troll"
+          ],
+          "dungeons": [
+            "haunted-crypt",
+            "lich-keep"
+          ]
         }
       ]
     },
-
     {
       "id": "ice",
       "name": "Ice Region",
@@ -140,8 +183,13 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 4,
-          "enemies": ["ice-spirit", "slime"],
-          "dungeons": ["frozen-grotto"]
+          "enemies": [
+            "ice-spirit",
+            "slime"
+          ],
+          "dungeons": [
+            "frozen-grotto"
+          ]
         },
         {
           "id": "ice-zone-2",
@@ -149,8 +197,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 6,
-          "enemies": ["ice-spirit", "skeleton"],
-          "dungeons": ["frozen-grotto", "haunted-crypt"]
+          "enemies": [
+            "ice-spirit",
+            "skeleton"
+          ],
+          "dungeons": [
+            "frozen-grotto",
+            "haunted-crypt"
+          ]
         },
         {
           "id": "ice-zone-3",
@@ -158,8 +212,15 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 8,
-          "enemies": ["skeleton", "troll"],
-          "dungeons": ["frozen-grotto", "frost-giant-hall", "glacial-warden-sanctum"]
+          "enemies": [
+            "skeleton",
+            "troll"
+          ],
+          "dungeons": [
+            "frozen-grotto",
+            "frost-giant-hall",
+            "glacial-warden-sanctum"
+          ]
         },
         {
           "id": "ice-zone-4",
@@ -167,12 +228,18 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 10,
-          "enemies": ["troll", "specter"],
-          "dungeons": ["frozen-grotto", "frost-giant-hall", "glacial-warden-sanctum"]
+          "enemies": [
+            "troll",
+            "specter"
+          ],
+          "dungeons": [
+            "frozen-grotto",
+            "frost-giant-hall",
+            "glacial-warden-sanctum"
+          ]
         }
       ]
     },
-
     {
       "id": "fire",
       "name": "Fire Region",
@@ -184,10 +251,10 @@
           "kind": "hub"
         },
         {
-          "id": "fire-shop",
-          "name": "Ember Market",
+          "id": "blacksmith",
+          "name": "Dwarven Blacksmith",
           "type": "shop",
-          "shopId": "fire-shop"
+          "shopId": "blacksmith"
         },
         {
           "id": "fire-zone-1",
@@ -195,8 +262,13 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 5,
-          "enemies": ["fire-imp", "goblin"],
-          "dungeons": ["fire-embers"]
+          "enemies": [
+            "fire-imp",
+            "goblin"
+          ],
+          "dungeons": [
+            "fire-embers"
+          ]
         },
         {
           "id": "fire-zone-2",
@@ -204,8 +276,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 7,
-          "enemies": ["fire-imp", "orc"],
-          "dungeons": ["fire-embers", "magma-halls"]
+          "enemies": [
+            "fire-imp",
+            "orc"
+          ],
+          "dungeons": [
+            "fire-embers",
+            "magma-halls"
+          ]
         },
         {
           "id": "fire-zone-3",
@@ -213,8 +291,15 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 9,
-          "enemies": ["orc", "troll"],
-          "dungeons": ["magma-halls", "fire-embers", "cinder-wyvern-roost"]
+          "enemies": [
+            "orc",
+            "troll"
+          ],
+          "dungeons": [
+            "magma-halls",
+            "fire-embers",
+            "cinder-wyvern-roost"
+          ]
         },
         {
           "id": "fire-zone-4",
@@ -222,12 +307,18 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 12,
-          "enemies": ["troll", "fire-imp"],
-          "dungeons": ["magma-halls", "cinder-wyvern-roost", "flame-sovereign-throne"]
+          "enemies": [
+            "troll",
+            "fire-imp"
+          ],
+          "dungeons": [
+            "magma-halls",
+            "cinder-wyvern-roost",
+            "flame-sovereign-throne"
+          ]
         }
       ]
     },
-
     {
       "id": "ocean",
       "name": "Ocean Region",
@@ -250,8 +341,13 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 2,
-          "enemies": ["slime", "sea-serpent"],
-          "dungeons": ["slime-pond"]
+          "enemies": [
+            "slime",
+            "sea-serpent"
+          ],
+          "dungeons": [
+            "slime-pond"
+          ]
         },
         {
           "id": "ocean-zone-2",
@@ -259,8 +355,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 4,
-          "enemies": ["sea-serpent", "bandit"],
-          "dungeons": ["slime-pond", "sunken-grotto"]
+          "enemies": [
+            "sea-serpent",
+            "bandit"
+          ],
+          "dungeons": [
+            "slime-pond",
+            "sunken-grotto"
+          ]
         },
         {
           "id": "ocean-zone-3",
@@ -268,8 +370,15 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 7,
-          "enemies": ["sea-serpent", "specter"],
-          "dungeons": ["slime-pond", "haunted-crypt", "kraken-lair"]
+          "enemies": [
+            "sea-serpent",
+            "specter"
+          ],
+          "dungeons": [
+            "slime-pond",
+            "haunted-crypt",
+            "kraken-lair"
+          ]
         },
         {
           "id": "ocean-zone-4",
@@ -277,8 +386,14 @@
           "type": "zone",
           "kind": "zone",
           "minLevel": 11,
-          "enemies": ["sea-serpent", "troll"],
-          "dungeons": ["leviathan-depths", "kraken-lair"]
+          "enemies": [
+            "sea-serpent",
+            "troll"
+          ],
+          "dungeons": [
+            "leviathan-depths",
+            "kraken-lair"
+          ]
         }
       ]
     }

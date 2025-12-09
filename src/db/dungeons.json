@@ -4,315 +4,378 @@
       "id": "goblin-den",
       "name": "Goblin Den",
       "theme": "cavern / bandit lair",
-      "description": "A cramped network of tunnels infested with goblins, scout bats and the occasional goblin shaman. Expect many small skirmishes and quick, low-reward drops.",
+      "description": "A cramped network of tunnels infested with goblins, scout bats and the occasional archer. Expect many small skirmishes and quick, low-reward drops.",
       "recommendedLevel": 1,
       "size": 3,
       "tileCount": 9,
-      "tileTypes": {
-        "combat": 0.80,
-        "treasure": 0.10,
-        "rest": 0.08,
-        "special": 0.02
-      },
+      "tileTypes": { "combat": 0.8, "treasure": 0.1, "rest": 0.08, "special": 0.02 },
       "enemyPool": {
-        "common": [
-          "goblin",
-          "bat"
-        ],
-        "uncommon": [
-          "goblin_archer",
-          "goblin_shaman"
-        ],
+        "common": ["goblin", "bat"],
+        "uncommon": ["goblin-archer", "goblin-brute"],
         "rare": []
       },
       "minEnemiesPerRoom": 2,
       "maxEnemiesPerRoom": 3,
-      "boss": {
-        "id": "troll",
-        "name": "Troll Warlord",
-        "notes": "Single powerful melee boss that appears after most tiles explored."
-      },
-      "lootHints": [
-        "potion",
-        "bat_wing",
-        "orc_tooth (rare from orc crossover)"
-      ],
-      "clearRewards": {
-        "gold": 80,
-        "exp": 250,
-        "items": [
-          {
-            "id": "potion",
-            "qty": 2
-          },
-          {
-            "id": "bat_wing",
-            "qty": 1
-          }
-        ]
-      }
+      "boss": { "id": "goblin-king", "name": "Goblin King", "notes": "High-HP goblin boss — moderate single-target damage, may call reinforcements." },
+      "lootHints": ["potion", "bat_wing", "orc_tooth (rare from orc crossover)"],
+      "clearRewards": { "gold": 80, "exp": 250, "items": [{ "id": "potion", "qty": 2 }, { "id": "bat_wing", "qty": 1 }] }
     },
+
     {
       "id": "slime-pond",
       "name": "Slime Pond",
       "theme": "wetlands / ooze-filled bog",
-      "description": "Mucous pools and slippery banks. Slimes dominate the area; some water-twisted abominations lurk deeper.",
-      "recommendedLevel": 2,
+      "description": "Mucous pools and slippery banks. Slimes dominate the area; water-twisted abominations lurk deeper.",
+      "recommendedLevel": 1,
       "size": 4,
       "tileCount": 16,
-      "tileTypes": {
-        "combat": 0.75,
-        "treasure": 0.12,
-        "rest": 0.08,
-        "special": 0.05
-      },
+      "tileTypes": { "combat": 0.75, "treasure": 0.12, "rest": 0.08, "special": 0.05 },
       "enemyPool": {
-        "common": [
-          "slime"
-        ],
-        "uncommon": [
-          "sea-serpent",
-          "slime"
-        ],
-        "rare": []
+        "common": ["slime"],
+        "uncommon": ["slime-large", "slime"],
+        "rare": ["sea-serpent"]
       },
       "minEnemiesPerRoom": 1,
       "maxEnemiesPerRoom": 2,
-      "boss": {
-        "id": "sea-serpent",
-        "name": "Bog Sea-Serpent",
-        "notes": "Powerful water-element boss; vulnerable to fire but resists ice."
-      },
-      "lootHints": [
-        "slime_gel",
-        "serpent_scale",
-        "potion"
-      ],
-      "clearRewards": {
-        "gold": 120,
-        "exp": 320,
-        "items": [
-          {
-            "id": "slime_gel",
-            "qty": 2
-          },
-          {
-            "id": "potion",
-            "qty": 1
-          }
-        ]
-      }
+      "boss": { "id": "slime-queen", "name": "Slime Queen", "notes": "AOE & split mechanics — spawns small slimes when damaged; avoid letting the battlefield fill up." },
+      "lootHints": ["slime_gel", "slime_core", "potion"],
+      "clearRewards": { "gold": 120, "exp": 320, "items": [{ "id": "slime_gel", "qty": 2 }, { "id": "potion", "qty": 1 }] }
     },
+
     {
       "id": "howling-woods",
       "name": "Howling Woods",
       "theme": "forest / wilds",
       "description": "A moonlit forest where wolves and lone predators roam. Watch for ambushes from packs.",
-      "recommendedLevel": 3,
+      "recommendedLevel": 1,
       "size": 4,
       "tileCount": 16,
-      "tileTypes": {
-        "combat": 0.85,
-        "treasure": 0.08,
-        "rest": 0.05,
-        "special": 0.02
-      },
+      "tileTypes": { "combat": 0.85, "treasure": 0.08, "rest": 0.05, "special": 0.02 },
       "enemyPool": {
-        "common": [
-          "wolf"
-        ],
-        "uncommon": [
-          "wolf",
-          "bat"
-        ],
-        "rare": [
-          "troll"
-        ]
+        "common": ["wolf"],
+        "uncommon": ["dire-wolf", "bat"],
+        "rare": ["troll"]
       },
       "minEnemiesPerRoom": 1,
       "maxEnemiesPerRoom": 3,
-      "boss": {
-        "id": "troll",
-        "name": "Forest Troll",
-        "notes": "A heavy-hitting beast; packs may lead you to it."
-      },
-      "lootHints": [
-        "wolf_pelt",
-        "troll_hide",
-        "potion"
-      ],
-      "clearRewards": {
-        "gold": 140,
-        "exp": 380,
-        "items": [
-          {
-            "id": "wolf_pelt",
-            "qty": 1
-          },
-          {
-            "id": "potion",
-            "qty": 1
-          }
-        ]
-      }
+      "boss": { "id": "dire-wolf", "name": "Dire Wolf", "notes": "Fast single-target burst damage; may be accompanied by lesser wolves." },
+      "lootHints": ["wolf_pelt", "troll_hide", "potion"],
+      "clearRewards": { "gold": 140, "exp": 380, "items": [{ "id": "wolf_pelt", "qty": 1 }, { "id": "potion", "qty": 1 }] }
     },
+
     {
       "id": "frozen-grotto",
       "name": "Frozen Grotto",
       "theme": "ice / elemental",
-      "description": "Glittering caverns of ice and ancient frost magic. Cold damages some equipment; fire-based attacks shine here.",
-      "recommendedLevel": 4,
+      "description": "Glittering caverns of ice and ancient frost magic. Cold permeates the walls; fire-based attacks shine here.",
+      "recommendedLevel": 1,
       "size": 3,
       "tileCount": 9,
-      "tileTypes": {
-        "combat": 0.78,
-        "treasure": 0.10,
-        "rest": 0.08,
-        "special": 0.04
-      },
+      "tileTypes": { "combat": 0.78, "treasure": 0.1, "rest": 0.08, "special": 0.04 },
       "enemyPool": {
-        "common": [
-          "ice-spirit"
-        ],
-        "uncommon": [
-          "ice-spirit",
-          "slime"
-        ],
-        "rare": [
-          "troll"
-        ]
+        "common": ["ice-spirit"],
+        "uncommon": ["ice-spirit", "slime"],
+        "rare": ["ice-wyrm"]
       },
       "minEnemiesPerRoom": 1,
       "maxEnemiesPerRoom": 2,
-      "boss": {
-        "id": "ice-spirit",
-        "name": "Frost Guardian",
-        "notes": "Elemental boss—very weak to fire, immune/reduced to ice."
-      },
-      "lootHints": [
-        "frost_core",
-        "mana_leaf",
-        "potion"
-      ],
-      "clearRewards": {
-        "gold": 180,
-        "exp": 460,
-        "items": [
-          {
-            "id": "frost_core",
-            "qty": 1
-          },
-          {
-            "id": "mana_leaf",
-            "qty": 1
-          }
-        ]
-      }
+      "boss": { "id": "frost-giant", "name": "Frost Giant", "notes": "Elemental titan — huge HP and high chance to freeze; very weak to fire." },
+      "lootHints": ["frost_core", "mana_leaf", "potion"],
+      "clearRewards": { "gold": 180, "exp": 460, "items": [{ "id": "frost_core", "qty": 1 }, { "id": "mana_leaf", "qty": 1 }] }
     },
+
     {
       "id": "haunted-crypt",
       "name": "Haunted Crypt",
       "theme": "undead / necropolis",
       "description": "Mausoleums and bone-lined halls. Skeletons and necromantic mages haunt the corridors; expect undead resistances and holy vulnerabilities.",
-      "recommendedLevel": 5,
+      "recommendedLevel": 1,
       "size": 4,
       "tileCount": 16,
-      "tileTypes": {
-        "combat": 0.82,
-        "treasure": 0.10,
-        "rest": 0.04,
-        "special": 0.04
-      },
+      "tileTypes": { "combat": 0.82, "treasure": 0.1, "rest": 0.04, "special": 0.04 },
       "enemyPool": {
-        "common": [
-          "skeleton",
-          "mage_skeleton"
-        ],
-        "uncommon": [
-          "skeleton",
-          "mage_skeleton",
-          "specter"
-        ],
-        "rare": []
+        "common": ["skeleton", "mage_skeleton"],
+        "uncommon": ["skeleton", "mage_skeleton", "specter"],
+        "rare": ["lich-apprentice"]
       },
       "minEnemiesPerRoom": 1,
       "maxEnemiesPerRoom": 3,
-      "boss": {
-        "id": "specter",
-        "name": "Crypt Specter",
-        "notes": "Ethereal foe with high magic defense; sacred/holy attacks are most effective."
-      },
-      "lootHints": [
-        "bone_shard",
-        "ectoplasm",
-        "mana_leaf"
-      ],
-      "clearRewards": {
-        "gold": 220,
-        "exp": 520,
-        "items": [
-          {
-            "id": "bone_shard",
-            "qty": 2
-          },
-          {
-            "id": "ectoplasm",
-            "qty": 1
-          }
-        ]
-      }
+      "boss": { "id": "lich-apprentice", "name": "Lich Apprentice", "notes": "Necromancer boss — summons and high magic damage. Holy attacks and interrupts are effective." },
+      "lootHints": ["bone_shard", "ectoplasm", "mana_leaf"],
+      "clearRewards": { "gold": 220, "exp": 520, "items": [{ "id": "bone_shard", "qty": 2 }, { "id": "ectoplasm", "qty": 1 }] }
     },
+
     {
       "id": "fire-embers",
       "name": "Fire Embers",
       "theme": "ruins / fire element",
       "description": "Ruins warmed by volcanic fissures. Fire imps skitter through the ash—beware groups and burning hazards.",
-      "recommendedLevel": 20,
+      "recommendedLevel": 1,
       "size": 2,
       "tileCount": 4,
-      "tileTypes": {
-        "combat": 0.80,
-        "treasure": 0.12,
-        "rest": 0.06,
-        "special": 0.02
-      },
+      "tileTypes": { "combat": 0.8, "treasure": 0.12, "rest": 0.06, "special": 0.02 },
       "enemyPool": {
-        "common": [
-          "fire-imp",
-          "goblin"
-        ],
-        "uncommon": [
-          "fire-imp",
-          "goblin",
-          "orc"
-        ],
-        "rare": []
+        "common": ["fire-imp", "goblin"],
+        "uncommon": ["fire-imp", "goblin", "orc"],
+        "rare": ["magma-elemental"]
       },
       "minEnemiesPerRoom": 1,
       "maxEnemiesPerRoom": 2,
-      "boss": {
-        "id": "fire-imp",
-        "name": "Scorch Imp Trio",
-        "notes": "Clustered elemental boss fight (multiple imps acting as a single encounter)."
+      "boss": { "id": "magma-elemental", "name": "Magma Elemental", "notes": "Damaging ground effects and heavy magic bursts; avoid lingering in hotspots." },
+      "lootHints": ["ember_fragment", "potion"],
+      "clearRewards": { "gold": 160, "exp": 400, "items": [{ "id": "ember_fragment", "qty": 2 }, { "id": "potion", "qty": 1 }] }
+    },
+
+    {
+      "id": "goblin-king-lair",
+      "name": "Goblin King Lair",
+      "theme": "throne cavern",
+      "description": "Deeper tunnels beneath the den where the Goblin King and elite guards hold court. Tougher fights and better loot.",
+      "recommendedLevel": 1,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": { "combat": 0.82, "treasure": 0.12, "rest": 0.04, "special": 0.02 },
+      "enemyPool": {
+        "common": ["goblin-brute", "goblin-archer"],
+        "uncommon": ["goblin-archer", "bandit"],
+        "rare": ["goblin-king"]
       },
-      "lootHints": [
-        "ember_fragment",
-        "potion"
-      ],
-      "clearRewards": {
-        "gold": 160,
-        "exp": 400,
-        "items": [
-          {
-            "id": "ember_fragment",
-            "qty": 2
-          },
-          {
-            "id": "potion",
-            "qty": 1
-          }
-        ]
-      }
+      "minEnemiesPerRoom": 2,
+      "maxEnemiesPerRoom": 4,
+      "boss": { "id": "goblin-king", "name": "Goblin King", "notes": "The ruler of the den — high HP and reinforcement mechanics." },
+      "lootHints": ["king_crown", "potion", "orc_tooth"],
+      "clearRewards": { "gold": 220, "exp": 1800, "items": [{ "id": "king_crown", "qty": 1 }, { "id": "potion", "qty": 2 }] }
+    },
+
+    {
+      "id": "troll-stronghold",
+      "name": "Troll Stronghold",
+      "theme": "rocky keep / bandit fort",
+      "description": "A fortified outcrop used by trolls and raiders. Expect heavy single-target foes and groups of brutes.",
+      "recommendedLevel": 1,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": { "combat": 0.86, "treasure": 0.06, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["troll", "bandit"],
+        "uncommon": ["bandit-leader", "bandit"],
+        "rare": ["banded-troll"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": { "id": "troll", "name": "Troll Warlord", "notes": "Heavy physical boss with regeneration and wide swings." },
+      "lootHints": ["troll_hide", "coin_pouch", "leader_bandana"],
+      "clearRewards": { "gold": 320, "exp": 2200, "items": [{ "id": "troll_hide", "qty": 2 }, { "id": "coin_pouch", "qty": 1 }] }
+    },
+
+    {
+      "id": "windbreaker-ruins",
+      "name": "Windbreaker Ruins",
+      "theme": "sky-ruins / cliffside",
+      "description": "Broken pillars and gust-swept platforms where harpies and wind spirits nest. Mobility matters here.",
+      "recommendedLevel": 1,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": { "combat": 0.8, "treasure": 0.12, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["harpy", "bat"],
+        "uncommon": ["harpy", "wolf"],
+        "rare": ["harpy"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": { "id": "harpy", "name": "Harpy Matron", "notes": "Airborne boss with multi-hit dive attacks and crowd-control screeches." },
+      "lootHints": ["feather", "bat_wing", "potion"],
+      "clearRewards": { "gold": 260, "exp": 1400, "items": [{ "id": "feather", "qty": 3 }, { "id": "potion", "qty": 1 }] }
+    },
+
+    {
+      "id": "frost-giant-hall",
+      "name": "Frost Giant Hall",
+      "theme": "ancient ice fortress",
+      "description": "Hallways carved from ancient glacier-ice; colossal guardians patrol the depths.",
+      "recommendedLevel": 1,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": { "combat": 0.8, "treasure": 0.12, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["ice-spirit", "ice-spirit"],
+        "uncommon": ["ice-spirit", "ice-wyrm"],
+        "rare": ["frost-giant"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 2,
+      "boss": { "id": "frost-giant", "name": "Frost Giant", "notes": "Huge physical presence; high defense and AOE freeze chance." },
+      "lootHints": ["frost_core", "giant_tooth"],
+      "clearRewards": { "gold": 800, "exp": 4800, "items": [{ "id": "frost_core", "qty": 3 }, { "id": "giant_tooth", "qty": 1 }] }
+    },
+
+    {
+      "id": "glacial-warden-sanctum",
+      "name": "Glacial Warden Sanctum",
+      "theme": "sealed ice shrine",
+      "description": "A sanctified pit where cold magic condenses — spectral and frost guardians patrol this domain.",
+      "recommendedLevel": 1,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": { "combat": 0.82, "treasure": 0.1, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["specter", "ice-spirit"],
+        "uncommon": ["specter", "mage_skeleton"],
+        "rare": ["wraith-lord"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": { "id": "wraith-lord", "name": "Wraith Lord", "notes": "Ethereal foe with life-drain and AOE magic; resists physical." },
+      "lootHints": ["ectoplasm", "bone_shard"],
+      "clearRewards": { "gold": 1200, "exp": 7600, "items": [{ "id": "ectoplasm", "qty": 3 }, { "id": "bone_shard", "qty": 5 }] }
+    },
+
+    {
+      "id": "lich-keep",
+      "name": "Lich Keep",
+      "theme": "arcane fortress / necropolis",
+      "description": "An ancient keep steeped in dark rites. Expect summoned minions and devastating magic from the lord within.",
+      "recommendedLevel": 1,
+      "size": 5,
+      "tileCount": 25,
+      "tileTypes": { "combat": 0.78, "treasure": 0.14, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["mage_skeleton", "skeleton"],
+        "uncommon": ["lich-apprentice", "skeleton-archer"],
+        "rare": ["lich-king"]
+      },
+      "minEnemiesPerRoom": 2,
+      "maxEnemiesPerRoom": 4,
+      "boss": { "id": "lich-king", "name": "Lich King", "notes": "High magic boss with summons and curse mechanics." },
+      "lootHints": ["lich_heart", "bone_shard", "mana_leaf"],
+      "clearRewards": { "gold": 5000, "exp": 17500, "items": [{ "id": "lich_heart", "qty": 1 }, { "id": "bone_shard", "qty": 10 }] }
+    },
+
+    {
+      "id": "magma-halls",
+      "name": "Magma Halls",
+      "theme": "volcanic cores / forge-ruins",
+      "description": "Heat-warped corridors and rivers of lava. Magma elementals and fire beasts call this place home.",
+      "recommendedLevel": 1,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": { "combat": 0.8, "treasure": 0.12, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["fire-imp", "orc"],
+        "uncommon": ["magma-elemental", "fire-imp"],
+        "rare": ["scorched-golem"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": { "id": "magma-elemental", "name": "Magma Elemental", "notes": "Damaging ground effect and strong magic bursts." },
+      "lootHints": ["magma_core", "ember_fragment"],
+      "clearRewards": { "gold": 2200, "exp": 12800, "items": [{ "id": "magma_core", "qty": 1 }, { "id": "ember_fragment", "qty": 5 }] }
+    },
+
+    {
+      "id": "cinder-wyvern-roost",
+      "name": "Cinder Wyvern Roost",
+      "theme": "lava cliffs / nests",
+      "description": "A scorched cliffside inhabited by wyverns — expect flight phases and powerful breath attacks.",
+      "recommendedLevel": 1,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": { "combat": 0.78, "treasure": 0.14, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["fire-imp", "goblin"],
+        "uncommon": ["fire-imp", "cinder-wyvern"],
+        "rare": ["cinder-wyvern"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 2,
+      "boss": { "id": "cinder-wyvern", "name": "Cinder Wyvern", "notes": "High physical and magic damage with flight phases." },
+      "lootHints": ["wyvern_scale", "ember_fragment"],
+      "clearRewards": { "gold": 4800, "exp": 22000, "items": [{ "id": "wyvern_scale", "qty": 3 }, { "id": "ember_fragment", "qty": 6 }] }
+    },
+
+    {
+      "id": "flame-sovereign-throne",
+      "name": "Flame Sovereign Throne",
+      "theme": "molten palace / throne",
+      "description": "The domain of the Flame Sovereign — extreme heat, persistent burn auras and massive AOE. End-game territory.",
+      "recommendedLevel": 1,
+      "size": 2,
+      "tileCount": 4,
+      "tileTypes": { "combat": 0.78, "treasure": 0.16, "rest": 0.04, "special": 0.02 },
+      "enemyPool": {
+        "common": ["magma-elemental", "fire-imp"],
+        "uncommon": ["scorched-golem", "magma-elemental"],
+        "rare": ["goblin"]
+      },
+      "minEnemiesPerRoom": 2,
+      "maxEnemiesPerRoom": 4,
+      "boss": { "id": "flame-sovereign", "name": "Flame Sovereign", "notes": "Extreme AOE and persistent burn auras; region end-boss." },
+      "lootHints": ["sovereign_flame", "ember_fragment"],
+      "clearRewards": { "gold": 15000, "exp": 28000, "items": [{ "id": "sovereign_flame", "qty": 1 }, { "id": "ember_fragment", "qty": 10 }] }
+    },
+
+    {
+      "id": "sunken-grotto",
+      "name": "Sunken Grotto",
+      "theme": "submerged ruins / grottos",
+      "description": "Waterlogged halls and collapsed corridors. Beware water elementals and lurking serpents.",
+      "recommendedLevel": 1,
+      "size": 3,
+      "tileCount": 9,
+      "tileTypes": { "combat": 0.8, "treasure": 0.12, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["sea-serpent", "slime"],
+        "uncommon": ["sea-serpent", "coral-guardian"],
+        "rare": ["kraken"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": { "id": "kraken", "name": "Kraken", "notes": "High HP, tentacle AOE and ink cloud that reduces accuracy." },
+      "lootHints": ["serpent_scale", "coral_shard"],
+      "clearRewards": { "gold": 2600, "exp": 8200, "items": [{ "id": "serpent_scale", "qty": 3 }, { "id": "coral_shard", "qty": 1 }] }
+    },
+
+    {
+      "id": "kraken-lair",
+      "name": "Kraken Lair",
+      "theme": "deep sea cavern",
+      "description": "A deep abyssal chamber where the Kraken lurks. Multi-stage tentacle mechanics and heavy HP pool.",
+      "recommendedLevel": 1,
+      "size": 4,
+      "tileCount": 16,
+      "tileTypes": { "combat": 0.82, "treasure": 0.1, "rest": 0.06, "special": 0.02 },
+      "enemyPool": {
+        "common": ["sea-serpent", "coral-guardian"],
+        "uncommon": ["kraken", "sea-wraith"],
+        "rare": ["leviathan"]
+      },
+      "minEnemiesPerRoom": 1,
+      "maxEnemiesPerRoom": 3,
+      "boss": { "id": "kraken", "name": "The Kraken", "notes": "Tentacle slam AOE and accuracy-reducing ink clouds." },
+      "lootHints": ["kraken_tentacle", "serpent_scale"],
+      "clearRewards": { "gold": 5200, "exp": 8200, "items": [{ "id": "kraken_tentacle", "qty": 1 }, { "id": "serpent_scale", "qty": 3 }] }
+    },
+
+    {
+      "id": "leviathan-depths",
+      "name": "Leviathan Depths",
+      "theme": "abyssal trench / leviathan den",
+      "description": "The deepest trenches where the Leviathan prowls. Extreme boss encounter with phases and devastating AOE.",
+      "recommendedLevel": 1,
+      "size": 6,
+      "tileCount": 36,
+      "tileTypes": { "combat": 0.82, "treasure": 0.12, "rest": 0.04, "special": 0.02 },
+      "enemyPool": {
+        "common": ["sea-serpent", "sea-wraith"],
+        "uncommon": ["kraken", "coral-guardian"],
+        "rare": ["leviathan"]
+      },
+      "minEnemiesPerRoom": 2,
+      "maxEnemiesPerRoom": 4,
+      "boss": { "id": "leviathan", "name": "Leviathan", "notes": "Massive end-tier boss: tidal AOE, lightning phases, and devour mechanic." },
+      "lootHints": ["leviathan_scale", "ocean_heart"],
+      "clearRewards": { "gold": 42000, "exp": 43000, "items": [{ "id": "leviathan_scale", "qty": 3 }, { "id": "ocean_heart", "qty": 1 }] }
     }
   ]
 }

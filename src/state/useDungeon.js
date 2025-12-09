@@ -162,6 +162,8 @@ export default function useDungeon(initialRunId = null) {
 
     // find def
     const def = findDungeonDef(dungeonKey);
+    const dungeonLevel = Number(def?.recommendedLevel) || 1;
+
     const sizeN = Math.max(1, Math.floor(Number(n || def?.size) || DEFAULT_SIZE));
     const id = opts.id || `run-${Date.now()}`;
     const seed = Number.isFinite(Number(opts.seed)) ? Number(opts.seed) : (Math.floor(Math.random() * 0xffffffff) >>> 0);
@@ -205,6 +207,8 @@ export default function useDungeon(initialRunId = null) {
       seed,
       size: sizeN,
       tiles: tilesArr,
+        dungeonLevel,   // <-- NEW
+
       playerPos: { x: 0, y: 0 },
       playerHP: typeof opts.playerHP !== "undefined" ? opts.playerHP : null,
       playerMP: typeof opts.playerMP !== "undefined" ? opts.playerMP : null,
@@ -761,5 +765,7 @@ export default function useDungeon(initialRunId = null) {
     startBossFight,
     // new exports:
     claimDungeonRewards,
+    
+  dungeonLevel: run?.dungeonLevel || 1,
   };
 }

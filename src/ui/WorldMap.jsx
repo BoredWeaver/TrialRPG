@@ -10,6 +10,9 @@ import {
   setCurrentRegion,
 } from "../state/locations.js";
 
+// icons (lucide-react)
+import { Map as MapIcon, Compass, MapPin, DoorOpen, Eye, ChevronRight } from "lucide-react";
+
 /**
  * WorldMap (mobile-first, dark-fantasy theme)
  *
@@ -64,8 +67,13 @@ export default function WorldMap() {
     if (!regionKeys.includes(regionKey)) {
       return (
         <div className="p-4 min-h-[40vh]">
-          <h3 className="text-lg font-semibold text-gray-100 mb-3">Unknown region</h3>
-          <div className="text-sm text-gray-400 mb-4">Requested: <span className="font-medium text-gray-200">{regionKey}</span></div>
+          <h3 className="text-lg font-semibold text-gray-100 mb-3 flex items-center gap-2">
+            <MapIcon className="w-4 h-4 text-amber-300" />
+            Unknown region
+          </h3>
+          <div className="text-sm text-gray-400 mb-4">
+            Requested: <span className="font-medium text-gray-200">{regionKey}</span>
+          </div>
           <button
             className="px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600"
             onClick={() => navigate(-1)}
@@ -89,7 +97,10 @@ export default function WorldMap() {
       <div className="p-4">
         <div className="flex items-start justify-between mb-4 gap-4">
           <div className="min-w-0">
-            <h3 className="text-lg font-semibold text-gray-100 truncate">{title} Region</h3>
+            <h3 className="text-lg font-semibold text-gray-100 truncate flex items-center gap-2">
+              <Compass className="w-4 h-4 text-sky-400" />
+              {title} Region
+            </h3>
             <div className="text-xs text-gray-400 mt-1">
               City: <span className="font-medium text-gray-200 truncate">{city?.name ?? "—"}</span>
             </div>
@@ -97,11 +108,12 @@ export default function WorldMap() {
 
           <div className="flex gap-2 items-center">
             <button
-              className="px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600 text-sm"
+              className="px-3 py-2 rounded-md bg-muted-700 text-gray-100 border border-muted-600 text-sm flex items-center gap-2"
               onClick={() => navigate(-1)}
               title="Back"
               aria-label="Back"
             >
+              <ChevronRight className="w-4 h-4 transform rotate-180" />
               Back
             </button>
           </div>
@@ -135,10 +147,17 @@ export default function WorldMap() {
                   >
                     <div className="min-w-0">
                       <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <h4 id={`zone-${z.id}-title`} className="font-semibold text-gray-100 text-sm truncate">{z.name}</h4>
-                          <div className="text-xs text-gray-400 mt-1 truncate">
-                            {z.kind === "dungeon" ? `Dungeon • min Lv ${z.minLevel ?? "?"}` : (z.kind || z.type)}
+                        <div className="min-w-0 flex items-start gap-3">
+                          <div className="flex-shrink-0 mt-0.5">
+                            <MapPin className={`w-5 h-5 ${disabled ? "text-gray-500" : "text-emerald-300"}`} />
+                          </div>
+                          <div className="min-w-0">
+                            <h4 id={`zone-${z.id}-title`} className="font-semibold text-gray-100 text-sm truncate">
+                              {z.name}
+                            </h4>
+                            <div className="text-xs text-gray-400 mt-1 truncate">
+                              {z.kind === "dungeon" ? `Dungeon • min Lv ${z.minLevel ?? "?"}` : (z.kind || z.type)}
+                            </div>
                           </div>
                         </div>
 
@@ -163,7 +182,7 @@ export default function WorldMap() {
 
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <button
-                        className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors ${
+                        className={`w-full px-3 py-2 rounded text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                           disabled ? "bg-muted-700/60 text-gray-500 cursor-not-allowed" : "bg-indigo-900 text-indigo-100"
                         }`}
                         disabled={disabled}
@@ -172,14 +191,17 @@ export default function WorldMap() {
                         aria-disabled={disabled}
                         aria-label={disabled ? `${z.name} unavailable` : `Enter ${z.name}`}
                       >
-                        Enter Zone
+                        <DoorOpen className="w-4 h-4" />
+                        <span className="truncate">Enter Zone</span>
                       </button>
 
                       <button
-                        className="w-full px-3 py-2 rounded text-sm bg-muted-700 text-gray-100 border border-muted-600"
+                        className="w-full px-3 py-2 rounded text-sm bg-muted-700 text-gray-100 border border-muted-600 flex items-center justify-center gap-2"
                         onClick={() => setRegionAndNavigate(regionKey, `/map/${encodeURIComponent(regionKey)}`)}
                         title="Inspect region"
+                        aria-label={`Inspect ${z.name}`}
                       >
+                        <Eye className="w-4 h-4" />
                         Inspect
                       </button>
                     </div>
@@ -198,7 +220,13 @@ export default function WorldMap() {
 
   return (
     <div className="p-4">
-      <h2 className="text-lg font-semibold mb-4 text-gray-100">World Map</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-gray-100 flex items-center gap-2">
+          <MapIcon className="w-5 h-5 text-sky-400" />
+          World Map
+        </h2>
+        <div className="text-xs text-gray-400 hidden sm:block">Tap a region to inspect</div>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {displayRegions.map((r) => {
@@ -208,7 +236,7 @@ export default function WorldMap() {
               key={r.id}
               aria-labelledby={`region-${r.id}-title`}
               title={r.name}
-              className="rounded-lg p-4 flex flex-col justify-between min-h-[140px] transition-transform duration-150"
+              className="rounded-lg p-4 flex flex-col justify-between min-h-[140px] transition-transform duration-150 hover:translate-y-0.5"
               style={{
                 background: "rgba(255,255,255,0.02)",
                 border: "1px solid rgba(255,255,255,0.06)",
@@ -217,16 +245,21 @@ export default function WorldMap() {
               }}
             >
               <div className="min-w-0">
-                <h3 id={`region-${r.id}-title`} className="font-semibold text-gray-100 truncate">{r.name}</h3>
+                <h3 id={`region-${r.id}-title`} className="font-semibold text-gray-100 truncate flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-amber-300" />
+                  {r.name}
+                </h3>
                 <div className="text-xs text-gray-400 mt-1 truncate">{hub?.name ?? "—"}</div>
               </div>
 
               <div className="mt-3 flex flex-col sm:flex-row gap-2">
                 <button
                   onClick={() => setRegionAndNavigate(r.id)}
-                  className="flex-1 px-3 py-2 rounded bg-indigo-900 text-indigo-100 text-sm"
+                  className="flex-1 px-3 py-2 rounded bg-indigo-900 text-indigo-100 text-sm flex items-center justify-center gap-2"
                   title={`Open ${r.name}`}
+                  aria-label={`Open ${r.name}`}
                 >
+                  <ChevronRight className="w-4 h-4 transform rotate-180" />
                   Open
                 </button>
 
@@ -235,10 +268,12 @@ export default function WorldMap() {
                     if (hub) enterLocation(hub.id, "/");
                     else setRegionAndNavigate(r.id, "/");
                   }}
-                  className="px-3 py-2 rounded bg-muted-700 text-gray-100 border border-muted-600 text-sm"
+                  className="px-3 py-2 rounded bg-muted-700 text-gray-100 border border-muted-600 text-sm flex items-center justify-center gap-2"
                   title={hub ? `Enter ${hub.name}` : `Inspect ${r.name}`}
+                  aria-label={hub ? `Enter ${hub.name}` : `Inspect ${r.name}`}
                 >
-                  Enter City
+                  <MapPin className="w-4 h-4" />
+                  {hub ? "Enter City" : "Inspect"}
                 </button>
               </div>
             </section>

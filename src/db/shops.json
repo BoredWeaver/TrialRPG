@@ -2,40 +2,52 @@
   "central-shop": {
     "sellMultiplier": 0.5,
     "stock": {
-      "potion": { "price": 25, "qty": 999 },
+      "assassin-ring": { "price": 42, "qty": 2 },
+      "bat_wing": { "price": 3, "qty": 12 },
       "bomb": { "price": 45, "qty": 20 },
+      "brass-ring": { "price": 28, "qty": 6 },
       "iron-sword": { "price": 120, "qty": 6 },
-      "wooden-shield": { "price": 60, "qty": 8 },
-      "leather-helmet": { "price": 40, "qty": 10 },
+      "keen-dagger": { "price": 30, "qty": 4 },
       "leather-armor": { "price": 150, "qty": 4 },
-      "leather-boots": { "price": 35, "qty": 12 }
+      "leather-boots": { "price": 35, "qty": 12 },
+      "leather-helmet": { "price": 40, "qty": 10 },
+      "potion": { "price": 25, "qty": 999 },
+      "potion-small": { "price": 8, "qty": 200 },
+      "wooden-shield": { "price": 60, "qty": 8 },
+      "wolf_pelt": { "price": 4, "qty": 8 }
     }
   },
 
   "sky-shop": {
     "sellMultiplier": 0.5,
     "stock": {
-      "potion": { "price": 30, "qty": 999 },
+      "assassin-ring": { "price": 220, "qty": 2 },
       "brass-ring": { "price": 90, "qty": 5 },
-      "assassin-ring": { "price": 220, "qty": 2 }
+      "feather": { "price": 4, "qty": 20 },
+      "keen-dagger": { "price": 140, "qty": 3 },
+      "potion": { "price": 30, "qty": 999 },
+      "steel-helmet": { "price": 70, "qty": 4 }
     }
   },
 
   "ice-shop": {
     "sellMultiplier": 0.5,
     "stock": {
-      "potion": { "price": 28, "qty": 999 },
+      "frost_core": { "price": 250, "qty": 3 },
       "mana_leaf": { "price": 80, "qty": 10 },
-      "frost_core": { "price": 250, "qty": 3 }
+      "mythril-helmet": { "price": 160, "qty": 1 },
+      "potion": { "price": 28, "qty": 999 },
+      "potion-hi": { "price": 45, "qty": 10 }
     }
   },
 
   "fire-shop": {
     "sellMultiplier": 0.5,
     "stock": {
-      "potion": { "price": 35, "qty": 999 },
       "ember_fragment": { "price": 180, "qty": 6 },
-      "keen-dagger": { "price": 140, "qty": 4 }
+      "keen-dagger": { "price": 140, "qty": 4 },
+      "mythril-sword": { "price": 240, "qty": 1 },
+      "potion": { "price": 35, "qty": 999 }
     }
   },
 
@@ -43,8 +55,28 @@
     "sellMultiplier": 0.5,
     "stock": {
       "potion": { "price": 26, "qty": 999 },
+      "serpent_scale": { "price": 260, "qty": 2 },
       "slime_gel": { "price": 40, "qty": 12 },
-      "serpent_scale": { "price": 260, "qty": 2 }
+      "stone_fragment": { "price": 35, "qty": 6 }
+    }
+  },
+
+  "blacksmith": {
+    "sellMultiplier": 0.35,
+    "stock": {
+      "mythril-armor": { "price": 300, "qty": 2 },
+      "mythril-boots": { "price": 140, "qty": 3 },
+      "mythril-charm": { "price": 180, "qty": 2 },
+      "mythril-helmet": { "price": 160, "qty": 2 },
+      "mythril-shield": { "price": 210, "qty": 2 },
+      "mythril-sword": { "price": 240, "qty": 2 },
+
+      "steel-armor": { "price": 150, "qty": 4 },
+      "steel-boots": { "price": 60, "qty": 6 },
+      "steel-helmet": { "price": 70, "qty": 6 },
+      "steel-ring": { "price": 95, "qty": 4 },
+      "steel-shield": { "price": 90, "qty": 4 },
+      "steel-sword": { "price": 120, "qty": 5 }
     }
   }
 }

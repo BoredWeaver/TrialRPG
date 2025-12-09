@@ -401,13 +401,13 @@ export function useBattle() {
      NEW BATTLE START (accepts string id or array of ids)
      - New signature:
         startWithEnemy(enemyIdOrArray, playerOverrides = null, opts = {})
-       where playerOverrides = { hp, mp } and opts = { onFinish, meta, ... }
+       where playerOverrides = { hp, mp } and opts = { onFinish, meta, dungeonLevel, ... }
      - Backwards compatible: callers can still call startWithEnemy(enemyIdOrArray)
      ============================================================ */
 
   function startWithEnemy(enemyIdOrArray, playerOverrides = null, opts = {}) {
     clearSnapshot();
-
+    console.log("useBattle startwith Enemy opts",opts);
     let id;
     let idsArray = null;
     if (Array.isArray(enemyIdOrArray)) {
@@ -443,7 +443,8 @@ export function useBattle() {
     cancelEnemyTimer();
     setBusy(false);
 
-    const fresh = startBattle(enemyIdOrArray);
+    // Pass dungeonLevel through to startBattle so enemyBuilder can use it.
+    const fresh = startBattle(enemyIdOrArray, { dungeonLevel: opts.dungeonLevel });
     fresh.enemyId = id;
 
     // Apply playerOverrides to the fresh battle state if provided
@@ -587,7 +588,8 @@ function loadInitialBattle() {
 }
 
 function makeFreshBattle(id) {
-  const b = startBattle(id);
+  // explicit opts object to keep API stable; no dungeonLevel by default
+  const b = startBattle(id, {});
   b.enemyId = id;
   return b;
 }
@@ -650,8 +652,12 @@ function restoreSnapshot(snap) {
       ? snap.enemies.map(e => e.id)
       : [snap.enemyId || DEFAULT_ENEMY_ID];
 
-    // Rebuild baseline battle from engine
-    const fresh = startBattle(enemySource.length === 1 ? enemySource[0] : enemySource);
+    // Rebuild baseline battle from engine.
+    // If snapshot contains a stored dungeon-level (snap._dungeonLevel) prefer that for scaling.
+    const builderOpts = {};
+    if (Number.isFinite(Number(snap._dungeonLevel))) builderOpts.dungeonLevel = Number(snap._dungeonLevel);
+
+    const fresh = startBattle(enemySource.length === 1 ? enemySource[0] : enemySource, builderOpts);
     fresh.enemyId = enemySource[0] || DEFAULT_ENEMY_ID;
 
     // Restore player

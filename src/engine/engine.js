@@ -50,6 +50,7 @@ import {
   setDungeonExpMultiplier,
   scaleEnemyTemplate,
   buildEnemyRuntimeFromSource,
+  setDungeonLevel,     // <-- ADD THIS
 } from "./enemyBuilder.js";
 
 // ------------------------------------------------------------
@@ -433,11 +434,22 @@ function grantExpAndMaybeLevelUp(state, amount) {
 // ============================================================
 // START / RESET BATTLE
 // ============================================================
-export function startBattle(id = DEFAULT_ENEMY_ID) {
+export function startBattle(id = DEFAULT_ENEMY_ID, opts = {}) {
+// Dungeon level scaling hook
+  let dungeonLevel = null;
+
+  if (opts && Number.isFinite(Number(opts.dungeonLevel))) {
+    dungeonLevel = Number(opts.dungeonLevel);
+    try {
+      setDungeonLevel(dungeonLevel);   // tell enemyBuilder before building enemies
+    } catch (e) {
+      console.error("[engine] setDungeonLevel failed", e);
+    }
+  }
   const player = buildPlayerFromBase(playerBase);
   // pass enemies DB into builder so it can resolve templates
   const { enemies: runtimeEnemies, primary } = buildEnemyRuntimeFromSource(id, enemies);
-
+  console.log(dungeonLevel,"AHHHH");
   // Build initial state first (so recomputeDerivedWithStatuses has state context)
   const state = {
     enemyId: Array.isArray(id) ? id[0] : id,
@@ -448,6 +460,7 @@ export function startBattle(id = DEFAULT_ENEMY_ID) {
     over: false,
     result: null,
     log: [`A wild ${primary ? primary.name : "enemy"} appears! ${player.name} prepares for battle.`],
+    _dungeonLevel: dungeonLevel,
 
     // required by statuses.js to recompute stats
     deriveFromStats: deriveCombatFromStats,

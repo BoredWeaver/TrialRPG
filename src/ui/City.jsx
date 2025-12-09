@@ -5,6 +5,9 @@ import usePlayerProgress from "../state/usePlayerProgress.js";
 import { getCityForRegion, getLocationsForRegion } from "../state/locations.js";
 import { saveProgress } from "../state/playerProgress.js";
 
+// icons (lucide-react)
+import { Menu as MenuIcon, MapPin, ShoppingCart, Map as MapIcon, User, Star, ChevronRight } from "lucide-react";
+
 export default function City() {
   const { progress } = usePlayerProgress();
   const navigate = useNavigate();
@@ -36,38 +39,38 @@ export default function City() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      {/* Background */}
-      <div
-        className="
-          absolute inset-0 
-          
-        "
-      ></div>
-
+    <div className="relative min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-900 to-black">
       {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]"></div>
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-[1px]" />
 
       {/* Main content */}
-      <div className="relative z-10 p-4 sm:p-6 text-gray-200">
+      <div className="relative z-10 p-4 sm:p-6 text-gray-200 max-w-5xl mx-auto">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="min-w-0">
-            <h1 className="text-lg sm:text-xl font-semibold leading-tight truncate">
-              {cityName}
-            </h1>
-            <div className="text-xs text-gray-400 mt-1">
+        <div className="flex items-start justify-between gap-4 mb-6">
+          <div className="min-w-0 flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-amber-300" />
+              <h1 className="text-lg sm:text-xl font-semibold leading-tight truncate">
+                {cityName}
+              </h1>
+            </div>
+
+            <div className="ml-2 text-xs text-gray-400 hidden sm:block">
               Region:{" "}
               <span className="font-medium text-gray-200 truncate">{regionId}</span>
             </div>
           </div>
 
-          <button
-            onClick={() => navigate("/menu")}
-            className="px-3 py-1 rounded-md border text-sm bg-muted-700 text-gray-100 border-muted-600"
-          >
-            Menu
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate("/menu")}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-md border text-sm bg-[#0b0f14]/70 text-gray-100 border-[#1c232c] hover:bg-[#0f141a]/80 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              aria-label="Open menu"
+            >
+              <MenuIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Menu</span>
+            </button>
+          </div>
         </div>
 
         {/* Responsive layout */}
@@ -75,10 +78,12 @@ export default function City() {
           {/* Left side */}
           <div className="md:col-span-2 space-y-4">
             {/* Player Card */}
-            <div className="bg-[#0f141a]/80 backdrop-blur-sm rounded-xl border border-[#1c232c] p-4 shadow-md fantasy-border">
+            <div className="bg-[#0f141a]/80 backdrop-blur-sm rounded-xl border border-[#1c232c] p-4 shadow-md">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div aria-hidden className="w-12 h-12 rounded-md bg-white/10"></div>
+                  <div aria-hidden className="w-12 h-12 rounded-md bg-white/6 flex items-center justify-center">
+                    <User className="w-6 h-6 text-gray-100/90" />
+                  </div>
                   <div className="min-w-0">
                     <div className="text-sm font-semibold text-gray-100 truncate">
                       {player.name ?? "Adventurer"}
@@ -108,7 +113,12 @@ export default function City() {
               {/* EXP Bar */}
               <div className="mt-4">
                 <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
-                  <div>EXP</div>
+                  <div className="flex items-center gap-2">
+                    <div>EXP</div>
+                    <div className="hidden sm:inline text-[11px] px-2 py-0.5 rounded-full bg-white/3 text-gray-200">
+                      Next: {nextExp}
+                    </div>
+                  </div>
                   <div className="text-gray-300">
                     {exp} / {nextExp} ({Math.round(expPct * 100)}%)
                   </div>
@@ -131,7 +141,7 @@ export default function City() {
               <div className="text-sm font-semibold mb-2 text-gray-100">
                 About this city
               </div>
-              <div className="bg-[#0b0f14]/80 backdrop-blur-sm rounded-xl border p-3 text-sm text-gray-300 border-[#1c232c] shadow-sm">
+              <div className="bg-[#0b0f14]/80 backdrop-blur-sm rounded-xl border p-3 text-sm text-gray-300 border-[#1c232c] shadow-sm leading-relaxed">
                 {city?.description ||
                   "This is the regional hub. You can rest, buy supplies, and explore the world."}
               </div>
@@ -145,35 +155,47 @@ export default function City() {
           {/* Sidebar actions */}
           <aside className="space-y-4">
             <div className="bg-[#0f141a]/80 backdrop-blur-sm rounded-xl border border-[#1c232c] p-4 shadow-sm">
-              <div className="text-sm font-semibold text-gray-100 mb-2">Actions</div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-sm font-semibold text-gray-100">Actions</div>
+                <div className="text-xs text-gray-400">Quick</div>
+              </div>
 
               <div className="flex flex-col gap-3">
                 <button
                   onClick={handleVisitShop}
                   disabled={!shop}
-                  className={`w-full px-4 py-3 rounded-lg text-sm font-medium shadow-sm ${
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium shadow-sm transition-colors ${
                     shop
-                      ? "bg-amber-700 text-amber-100 fantasy-glow border border-amber-700"
+                      ? "bg-amber-700 text-amber-100 fantasy-glow border border-amber-700 hover:brightness-105"
                       : "bg-muted-700/50 text-gray-500 cursor-not-allowed border border-muted-600"
                   }`}
                 >
-                  {shop ? `Visit ${shop.name}` : "No Shop Available"}
+                  <div className="flex items-center gap-3">
+                    <ShoppingCart className="w-4 h-4" />
+                    <span className="truncate">{shop ? `Visit ${shop.name}` : "No Shop Available"}</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 opacity-70" />
                 </button>
 
                 <button
                   onClick={goToMap}
-                  className="w-full px-4 py-3 rounded-lg text-sm border bg-[#0b0f14]/80 backdrop-blur-sm text-gray-200 border-[#1c232c]"
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm border bg-[#0b0f14]/80 backdrop-blur-sm text-gray-200 border-[#1c232c] hover:bg-[#0f141a]/70"
                 >
-                  World Map
+                  <div className="flex items-center gap-3">
+                    <MapIcon className="w-4 h-4" />
+                    <span>World Map</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 opacity-60" />
                 </button>
-
-                
               </div>
             </div>
 
             <div className="bg-[#0b0f14]/80 backdrop-blur-sm rounded-xl border p-3 text-sm text-gray-300 border-[#1c232c] shadow-sm">
               <div className="flex items-center justify-between">
-                <div className="text-xs text-gray-400">Gold</div>
+                <div className="flex items-center gap-2">
+                  <div className="text-xs text-gray-400">Gold</div>
+                  <Star className="w-4 h-4 text-amber-400" />
+                </div>
                 <div className="font-semibold text-gray-100">{player.gold ?? 0}</div>
               </div>
               <div className="flex items-center justify-between mt-2">
