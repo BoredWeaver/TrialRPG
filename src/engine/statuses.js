@@ -158,7 +158,7 @@ export function recomputeDerivedWithStatuses(ent, state = null) {
     return { atk, def, maxHP, maxMP, mAtk, mDef };
   }
 
-  // PLAYER TYPE: uses ent.stats + equipment, plus accepts derived stat modifiers
+  // ---------- PLAYER TYPE ----------
   if (ent.stats) {
     // collect modifiers that target base stats (STR/DEX/MAG/CON etc) and derived fields separately
     const baseStatMods = {};   // e.g. { STR: +2, MAG: +3 }
@@ -185,17 +185,9 @@ export function recomputeDerivedWithStatuses(ent, state = null) {
         def: "def",
         defense: "def",
         matk: "mAtk",
-        "matk": "mAtk",
-        "matkatk": "mAtk",
-        "matkat": "mAtk",
-        "matk": "mAtk",
         mdef: "mDef",
-        "mdef": "mDef",
-        "mdefense": "mDef",
         maxhp: "maxHP",
-        "maxhp": "maxHP",
         maxmp: "maxMP",
-        "maxmp": "maxMP",
       };
 
       const mapped = map[low] || null;
@@ -219,14 +211,36 @@ export function recomputeDerivedWithStatuses(ent, state = null) {
       finalStats[k] = (finalStats[k] || 0) + baseStatMods[k];
     }
 
+    // Determine level for player (prefer ent.level, fallback to state.player.level, else 1)
+    const level = Number.isFinite(Number(ent.level)) ? Number(ent.level)
+      : (state && state.player && Number.isFinite(Number(state.player.level)) ? Number(state.player.level) : 1);
+
     // Derive combat values (use state-provided derive if available, else fallback)
     const deriveFn = (state && typeof state.deriveFromStats === "function") ? state.deriveFromStats : deriveCombatFromStatsFallback;
-    const derived = deriveFn(finalStats, ent.level || 1);
+    let derived;
+    try {
+      derived = deriveFn(finalStats, level);
+    } catch (e) {
+      console.error("[recomputeDerivedWithStatuses] deriveFromStats threw:", e);
+      derived = deriveCombatFromStatsFallback(finalStats, level);
+    }
 
-    // Apply equipment if helper exists on state, otherwise use derived directly
-    const applied = (state && typeof state.applyEquipmentToDerived === "function")
-      ? state.applyEquipmentToDerived({ ...derived }, ent.equipped || {})
-      : { ...derived };
+    // Apply equipment if helper exists on state, otherwise use derived directly.
+    // IMPORTANT: pass baseStats (finalStats) into applyEquipmentToDerived so statScale works.
+    let applied;
+    const applyEquip = state && typeof state.applyEquipmentToDerived === "function" ? state.applyEquipmentToDerived : null;
+    if (applyEquip) {
+      try {
+        applied = applyEquip({ ...derived }, ent.equipped || {}, finalStats);
+      } catch (e) {
+        console.error("[recomputeDerivedWithStatuses] applyEquipmentToDerived threw:", e);
+        applied = { ...derived };
+      }
+    } else {
+      // Debug helpful message — if missing, statScale cannot run
+      // (keep non-throwing behaviour)
+      applied = { ...derived };
+    }
 
     // Apply derived stat modifiers (these are absolute additive deltas)
     applied.atk  = (applied.atk  || 0) + (derivedMods.atk  || 0);
@@ -237,21 +251,41 @@ export function recomputeDerivedWithStatuses(ent, state = null) {
     applied.maxMP= (applied.maxMP|| 0) + (derivedMods.maxMP|| 0);
 
     // Commit derived values back to entity (clamp hp/mp)
-    ent.atk  = applied.atk;
-    ent.def  = applied.def;
-    ent.mAtk = applied.mAtk;
-    ent.mDef = applied.mDef;
+    ent.atk  = Number(applied.atk || 0);
+    ent.def  = Number(applied.def || 0);
+    ent.mAtk = Number(applied.mAtk || 0);
+    ent.mDef = Number(applied.mDef || 0);
 
-    ent.maxHP = Math.max(1, applied.maxHP || 1);
-    ent.maxMP = Math.max(0, applied.maxMP || 0);
+    ent.maxHP = Math.max(1, Number(applied.maxHP || 1));
+    ent.maxMP = Math.max(0, Number(applied.maxMP || 0));
 
-    ent.hp = Math.min(ent.hp || 0, ent.maxHP);
-    ent.mp = Math.min(ent.mp || 0, ent.maxMP);
+    // if hp/mp missing, default to max (first build). Otherwise clamp to new max.
+    if (typeof ent.hp !== "number" || Number.isNaN(ent.hp)) ent.hp = ent.maxHP;
+    else ent.hp = Math.min(ent.hp, ent.maxHP);
+
+    if (typeof ent.mp !== "number" || Number.isNaN(ent.mp)) ent.mp = ent.maxMP;
+    else ent.mp = Math.min(ent.mp, ent.maxMP);
+
+    // Debug traces to help you spot when baseStats are empty or scaling applied
+    try {
+      if (process && process.env && process.env.NODE_ENV === "development") {
+        console.debug("[recomputeDerivedWithStatuses] player recompute:", {
+          id: ent.id || ent.name,
+          finalStats,
+          level,
+          derived,
+          applied,
+          hasApplyEquip: !!applyEquip,
+        });
+      }
+    } catch (e) {
+      // ignore console errors in environments that don't support process
+    }
 
     return;
   }
 
-  // ENEMY TYPE (unchanged)
+  // ---------- ENEMY TYPE ----------
   if (ent._base) {
     const base = { ...ent._base };
     const mods = { atk: 0, def: 0, mAtk: 0, mDef: 0, maxHP: 0, maxMP: 0 };
@@ -272,10 +306,14 @@ export function recomputeDerivedWithStatuses(ent, state = null) {
     ent.maxHP = Math.max(1, base.maxHP + mods.maxHP);
     ent.maxMP = Math.max(0, base.maxMP + mods.maxMP);
 
-    ent.hp = Math.min(ent.hp || 0, ent.maxHP);
-    ent.mp = Math.min(ent.mp || 0, ent.maxMP);
+    if (typeof ent.hp !== "number" || Number.isNaN(ent.hp)) ent.hp = ent.maxHP;
+    else ent.hp = Math.min(ent.hp, ent.maxHP);
+
+    if (typeof ent.mp !== "number" || Number.isNaN(ent.mp)) ent.mp = ent.maxMP;
+    else ent.mp = Math.min(ent.mp, ent.maxMP);
   }
 }
+
 
 /**
  * Determine whether an object is an enemy.

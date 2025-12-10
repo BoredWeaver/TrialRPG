@@ -221,7 +221,7 @@ function processEffectForEntity(state, sourceEntity, effect) {
           message: `${sourceEntity?.name || "Enemy"} summoned ${created.length} minion(s).`,
           type: "info"
         });
-      } catch {}
+      } catch { }
     }
     return;
   }
@@ -263,24 +263,52 @@ function getEnemyByIndex(state, idx) {
 // ============================================================
 // Derived combat from stats
 // ============================================================
+// ============================================================
+// Derived combat from stats (improved scaling + sensible weights)
+// ============================================================
 function deriveCombatFromStats(stats = {}, level = 1) {
   const STR = Number(stats.STR) || 0;
   const DEX = Number(stats.DEX) || 0;
   const MAG = Number(stats.MAG) || 0;
   const CON = Number(stats.CON) || 0;
 
+  // Diminishing returns helper for very high stats
+  const dr = (v, alpha = 0.9) => Math.pow(v, alpha);
+
+  // Base contributions
+  const baseAtk = 4 + Math.floor(dr(STR) * 2.0) + Math.floor(DEX * 0.5) + Math.floor(level * 1.2);
+  const baseMAtk = 3 + Math.floor(dr(MAG) * 2.0) + Math.floor(DEX * 0.3) + Math.floor(level * 1.1);
+
+  const baseDef = 2 + Math.floor((CON * 1.2 + DEX * 0.6) / 1);
+  const baseMDef = 2 + Math.floor((MAG * 0.6 + CON * 0.6) / 1);
+
+  const baseMaxHP = 30 + Math.floor(CON * 10) + Math.floor(level * 4) + Math.floor(STR * 0.5);
+  const baseMaxMP = 10 + Math.floor(MAG * 6) + Math.floor(level * 1);
+
   return {
-    atk: 2 + STR * 2 + Math.floor(level / 2),
-    def: 1 + Math.floor((CON + DEX) / 2),
-    maxHP: 20 + CON * 8 + level * 2,
-    maxMP: 5 + MAG * 5 + Math.floor(level / 2),
-    mAtk: 2 + MAG * 2 + Math.floor(level / 2),
-    mDef: 1 + Math.floor((MAG + CON) / 2),
+    atk: Math.max(1, baseAtk),
+    def: Math.max(0, baseDef),
+    maxHP: Math.max(1, baseMaxHP),
+    maxMP: Math.max(0, baseMaxMP),
+    mAtk: Math.max(1, baseMAtk),
+    mDef: Math.max(0, baseMDef),
   };
 }
 
+
+// ============================================================
+// Apply equipment to raw stats
+// - bonus.statsPercent: { STR: 0.05 } => +floor(base STR * 0.05)
+// - bonus.stats: flat additions applied AFTER percent
+// ============================================================
 function applyEquipmentToStats(baseStats = {}, equipped = {}) {
+  // Work from a shallow copy so caller's baseStats isn't mutated.
   const out = { ...baseStats };
+
+  console.log("%c[EQUIP:STATS] ---- Applying equipment to base stats ----", "color:#6cf;font-weight:bold");
+  console.log("[BASE STATS]", baseStats);
+
+  // First: handle percent-of-base bonuses using the original baseStats values.
   for (const slot of Object.keys(equipped || {})) {
     const id = equipped[slot];
     if (!id) continue;
@@ -289,17 +317,23 @@ function applyEquipmentToStats(baseStats = {}, equipped = {}) {
     if (!spec || spec.kind !== "equipment") continue;
 
     const bonus = spec.bonus || {};
-    if (bonus.stats) {
-      for (const k of Object.keys(bonus.stats)) {
-        out[k] = (out[k] || 0) + (Number(bonus.stats[k]) || 0);
+
+    // Percent bonuses are applied relative to the ORIGINAL baseStats values.
+    if (bonus.statsPercent && typeof bonus.statsPercent === "object") {
+      console.log(`\n%c[ITEM] ${spec.name} (${id}) in slot ${slot} — percent stats`, "color:#0cf");
+      console.log("  percent stats bonus:", bonus.statsPercent);
+      for (const k of Object.keys(bonus.statsPercent)) {
+        const pct = Number(bonus.statsPercent[k]) || 0;
+        if (pct === 0) continue;
+        const baseVal = Number(baseStats[k]) || 0; // percent of original base
+        const add = Math.floor(baseVal * pct);
+        out[k] = (out[k] || 0) + add;
+        console.log(`   • ${k}: ${baseVal} + floor(${baseVal} × ${pct}) = +${add}`);
       }
     }
   }
-  return out;
-}
 
-function applyEquipmentToDerived(derived = {}, equipped = {}) {
-  const out = { ...derived };
+  // Second: apply flat stat bonuses (legacy) after percent-of-base.
   for (const slot of Object.keys(equipped || {})) {
     const id = equipped[slot];
     if (!id) continue;
@@ -309,15 +343,107 @@ function applyEquipmentToDerived(derived = {}, equipped = {}) {
 
     const bonus = spec.bonus || {};
 
-    if (Number.isFinite(Number(bonus.atk))) out.atk += Number(bonus.atk);
-    if (Number.isFinite(Number(bonus.def))) out.def += Number(bonus.def);
-    if (Number.isFinite(Number(bonus.mAtk))) out.mAtk += Number(bonus.mAtk);
-    if (Number.isFinite(Number(bonus.maxHP))) out.maxHP += Number(bonus.maxHP);
-    if (Number.isFinite(Number(bonus.maxMP))) out.maxMP += Number(bonus.maxMP);
-    if (Number.isFinite(Number(bonus.mDef))) out.mDef += Number(bonus.mDef);
+    if (bonus.stats && typeof bonus.stats === "object") {
+      console.log(`\n%c[ITEM] ${spec.name} (${id}) in slot ${slot} — flat stats`, "color:#0cf");
+      console.log("  flat stats bonus:", bonus.stats);
+      for (const k of Object.keys(bonus.stats)) {
+        const add = Number(bonus.stats[k]) || 0;
+        const before = out[k] || 0;
+        out[k] = before + add;
+        console.log(`   • ${k}: ${before} → ${out[k]} (flat +${add})`);
+      }
+    }
   }
+
+  console.log("%c[FINAL STATS AFTER EQUIPMENT]", "color:#6f6;font-weight:bold", out);
   return out;
 }
+
+
+// ============================================================
+// Apply equipment to derived values (keeps legacy flat derived
+// bonuses, and supports stat-driven scaling via bonus.statScale)
+// - signature: applyEquipmentToDerived(derived, equipped, baseStats = {})
+// - bonus.statScale allows item designers to specify how many points
+//   of a derived field to grant per-point of some player stat.
+//   Example: bonus.statScale = { atk: { STR: 0.2 }, maxHP: { CON: 3 } }
+// ============================================================
+function applyEquipmentToDerived(derived = {}, equipped = {}, baseStats = {}) {
+  console.log("%c[EQUIP:DERIVED] ---- Applying equipment to derived ----", "color:#fa0;font-weight:bold");
+  console.log("[BASE DERIVED]:", derived);
+  console.log("[BASE STATS FOR SCALING]:", baseStats);
+
+  const out = { ...derived };
+
+  // Detect whether baseStats looks like a valid player stat object
+  const hasStatKeys =
+    baseStats &&
+    Object.keys(baseStats).length > 0 &&
+    ["STR", "DEX", "MAG", "CON", "CRIT", "CRITDMG"].some(k => typeof baseStats[k] !== "undefined");
+
+  for (const slot of Object.keys(equipped || {})) {
+    const id = equipped[slot];
+    if (!id) continue;
+
+    const spec = ITEM_MAP[id];
+    if (!spec || spec.kind !== "equipment") continue;
+
+    const bonus = spec.bonus || {};
+    console.log(`\n%c[ITEM] ${spec.name} (${id})`, "color:#fc0");
+
+    // ---- FLAT DERIVED BONUSES ----
+    const flatFields = ["atk", "def", "mAtk", "mDef", "maxHP", "maxMP"];
+    for (const f of flatFields) {
+      if (Number.isFinite(Number(bonus[f]))) {
+        const before = out[f] || 0;
+        const add = Number(bonus[f]);
+        out[f] = before + add;
+        console.log(`    FLAT ${f}: ${before} → ${out[f]} (+${add})`);
+      }
+    }
+
+    // ---- STAT-SCALE BONUS (only if baseStats available) ----
+    if (bonus.statScale && typeof bonus.statScale === "object") {
+      if (!hasStatKeys) {
+        console.warn(
+          `[EQUIP:DERIVED] item ${id} has statScale but baseStats looks empty — skipping statScale for safety.`
+        );
+        console.log("  statScale (skipped):", bonus.statScale);
+      } else {
+        console.log("  statScale:", bonus.statScale);
+
+        for (const targetField of Object.keys(bonus.statScale)) {
+          const mapping = bonus.statScale[targetField];
+          if (!mapping || typeof mapping !== "object") continue;
+
+          let totalAdd = 0;
+          for (const statKey of Object.keys(mapping)) {
+            const mult = Number(mapping[statKey]) || 0;
+            if (mult === 0) continue;
+            const statVal = Number(baseStats[statKey]) || 0;
+            const add = Math.floor(statVal * mult);
+            totalAdd += add;
+            console.log(`     scale ${targetField} += floor(${statKey}(${statVal}) × ${mult}) = +${add}`);
+          }
+
+          if (totalAdd === 0) {
+            console.log(`     → RESULT ${targetField}: no change (totalAdd 0)`);
+            continue;
+          }
+
+          const before = out[targetField] || 0;
+          out[targetField] = before + totalAdd;
+          console.log(`     → RESULT ${targetField}: ${before} → ${out[targetField]} (+${totalAdd})`);
+        }
+      }
+    }
+  }
+
+  console.log("%c[FINAL DERIVED AFTER EQUIPMENT]", "color:#0f0;font-weight:bold", out);
+  return out;
+}
+
+
 
 // Exposed for statuses.js usage
 export { deriveCombatFromStats as deriveFromStats };
@@ -334,7 +460,7 @@ function buildPlayerFromBase(base) {
   const level = merged.level ?? 1;
 
   const d0 = deriveCombatFromStats(stats, level);
-  const derived = applyEquipmentToDerived({ ...d0 }, merged.equipped);
+  const derived = applyEquipmentToDerived({ ...d0 }, merged.equipped, stats);
 
   return {
     name: merged.name || base.name,
@@ -399,7 +525,7 @@ function grantExpAndMaybeLevelUp(state, amount) {
   const newLevel = updated.level;
   if (newLevel > prevLevel) {
     const d = deriveCombatFromStats(state.player.stats, state.player.level);
-    const applied = applyEquipmentToDerived({ ...d }, state.player.equipped);
+    const applied = applyEquipmentToDerived({ ...d }, state.player.equipped, state.player.stats);
 
     state.player.atk = applied.atk;
     state.player.def = applied.def;
@@ -417,7 +543,7 @@ function grantExpAndMaybeLevelUp(state, amount) {
     const beforeMP = state.player.mp;
 
     const d = deriveCombatFromStats(state.player.stats, state.player.level);
-    const applied = applyEquipmentToDerived({ ...d }, state.player.equipped);
+    const applied = applyEquipmentToDerived({ ...d }, state.player.equipped, state.player.stats);
 
     state.player.atk = applied.atk;
     state.player.def = applied.def;
@@ -435,7 +561,7 @@ function grantExpAndMaybeLevelUp(state, amount) {
 // START / RESET BATTLE
 // ============================================================
 export function startBattle(id = DEFAULT_ENEMY_ID, opts = {}) {
-// Dungeon level scaling hook
+  // Dungeon level scaling hook
   let dungeonLevel = null;
 
   if (opts && Number.isFinite(Number(opts.dungeonLevel))) {
@@ -449,7 +575,7 @@ export function startBattle(id = DEFAULT_ENEMY_ID, opts = {}) {
   const player = buildPlayerFromBase(playerBase);
   // pass enemies DB into builder so it can resolve templates
   const { enemies: runtimeEnemies, primary } = buildEnemyRuntimeFromSource(id, enemies);
-  console.log(dungeonLevel,"AHHHH");
+  console.log(dungeonLevel, "AHHHH");
   // Build initial state first (so recomputeDerivedWithStatuses has state context)
   const state = {
     enemyId: Array.isArray(id) ? id[0] : id,
@@ -995,7 +1121,7 @@ function onEnemyDeathMut(state, enemy) {
         message: `+${exp} EXP`,
         type: "success"
       });
-    } catch {}
+    } catch { }
   }
 
   // LOOT
@@ -1008,7 +1134,7 @@ function onEnemyDeathMut(state, enemy) {
 
       try {
         emit("collect", { itemId: d.id, qty });
-      } catch {}
+      } catch { }
 
       state.player.items = state.player.items || {};
       state.player.items[d.id] = (state.player.items[d.id] || 0) + qty;
@@ -1023,7 +1149,7 @@ function onEnemyDeathMut(state, enemy) {
           message: `Loot: ${qty}× ${itemName}`,
           type: "info"
         });
-      } catch {}
+      } catch { }
     }
   }
 }
@@ -1148,7 +1274,7 @@ export function allocateStat(state, statKey) {
   const beforeMP = s.player.mp;
 
   const d = deriveCombatFromStats(s.player.stats, s.player.level);
-  const applied = applyEquipmentToDerived({ ...d }, s.player.equipped || {});
+  const applied = applyEquipmentToDerived({ ...d }, s.player.equipped || {}, s.player.stats);
   s.player.atk = applied.atk;
   s.player.def = applied.def;
   s.player.maxHP = applied.maxHP;

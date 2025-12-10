@@ -10,6 +10,9 @@ import {
   getQuestDef,
 } from "../state/quests.js";
 
+// icons
+import { Map as MapIcon, Compass, CheckCircle, XCircle, Gift, Clock } from "lucide-react";
+
 /**
  * QuestBoard — improved UI
  * - Shows Available / Active / Completed columns
@@ -128,14 +131,31 @@ export default function QuestBoard() {
   return (
     <div className="p-4 text-gray-200">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Quest Board</h2>
-        <div className="text-sm text-gray-400">{message}</div>
+        <div className="flex items-center gap-3">
+          <Compass className="w-5 h-5 text-amber-300" />
+          <h2 className="text-lg font-semibold">Quest Board</h2>
+          <div className="text-xs text-gray-400 ml-2 hidden sm:block">• Your active objectives</div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          {message ? (
+            <div className="text-sm text-emerald-300 px-3 py-1 rounded bg-white/3">{message}</div>
+          ) : (
+            <div className="text-sm text-gray-400">Tips: Accept quests to earn rewards</div>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Available */}
         <div className="rounded-lg fantasy-border bg-panel-800 p-3">
-          <h3 className="text-md font-semibold text-gray-100 mb-3">Available</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-md font-semibold text-gray-100 flex items-center gap-2">
+              <MapIcon className="w-4 h-4 text-sky-400" />
+              Available
+            </h3>
+            <div className="text-xs text-gray-400">{available.length} found</div>
+          </div>
 
           {available.length === 0 ? (
             <div className="text-gray-500 text-sm">No quests available.</div>
@@ -145,25 +165,29 @@ export default function QuestBoard() {
                 <div key={q.id} className="p-3 rounded-lg bg-[#0f1720] border border-[#1f2937]">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="font-semibold text-gray-100">{q.title}</div>
+                      <div className="font-semibold text-gray-100 truncate">{q.title}</div>
                       <div className="text-xs text-gray-400 mt-1 truncate">{q.desc}</div>
-                      <div className="text-xs text-gray-300 mt-2">{renderTypeLabel(q)} • {renderTargetSummary(q)}</div>
+                      <div className="text-xs text-gray-300 mt-2 truncate">{renderTypeLabel(q)} • {renderTargetSummary(q)}</div>
                     </div>
-                    <div className="text-right text-xs text-gray-300">{renderRewards(q.rewards)}</div>
+                    <div className="text-right text-xs text-gray-300 min-w-[80px]">{renderRewards(q.rewards)}</div>
                   </div>
 
                   <div className="flex gap-2 mt-3">
                     <button
-                      className="flex-1 px-3 py-2 rounded bg-indigo-900 text-indigo-100 border border-indigo-700"
+                      className="flex-1 px-3 py-2 rounded bg-indigo-900 text-indigo-100 border border-indigo-700 inline-flex items-center justify-center gap-2"
                       onClick={() => handleAccept(q.id)}
+                      title={`Accept ${q.title}`}
                     >
+                      <CheckCircle className="w-4 h-4" />
                       Accept
                     </button>
 
                     <button
-                      className="px-3 py-2 rounded bg-muted-700 text-gray-200 border border-muted-600"
+                      className="px-3 py-2 rounded bg-muted-700 text-gray-200 border border-muted-600 inline-flex items-center gap-2"
                       onClick={() => handleForceComplete(q.id)}
+                      title="Force complete (dev)"
                     >
+                      <Gift className="w-4 h-4" />
                       Complete
                     </button>
                   </div>
@@ -175,7 +199,13 @@ export default function QuestBoard() {
 
         {/* Active */}
         <div className="rounded-lg fantasy-border bg-panel-800 p-3">
-          <h3 className="text-md font-semibold text-gray-100 mb-3">Active</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-md font-semibold text-gray-100 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-amber-300" />
+              Active
+            </h3>
+            <div className="text-xs text-gray-400">{Object.keys(playerQuests.active || {}).length} active</div>
+          </div>
 
           {Object.keys(playerQuests.active || {}).length === 0 ? (
             <div className="text-gray-500 text-sm">No active quests.</div>
@@ -187,33 +217,35 @@ export default function QuestBoard() {
                   <div key={id} className="p-3 rounded-lg bg-[#0f1720] border border-[#1f2937]">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <div className="font-semibold text-gray-100">{qDef?.title ?? id}</div>
+                        <div className="font-semibold text-gray-100 truncate">{qDef?.title ?? id}</div>
                         <div className="text-xs text-gray-400 mt-1 truncate">{qDef?.desc}</div>
-                        <div className="text-xs text-gray-300 mt-2">{renderTypeLabel(qDef)} • {renderTargetSummary(qDef)}</div>
+                        <div className="text-xs text-gray-300 mt-2 truncate">{renderTypeLabel(qDef)} • {renderTargetSummary(qDef)}</div>
                       </div>
-                      <div className="text-right text-xs text-gray-300">{renderRewards(qDef?.rewards)}</div>
+                      <div className="text-right text-xs text-gray-300 min-w-[80px]">{renderRewards(qDef?.rewards)}</div>
                     </div>
 
                     <div className="mt-3">{renderProgress(qDef, state)}</div>
 
-                    <div className="text-xs text-gray-300 mt-3 flex justify-between">
-                      <div>Accepted: {state.acceptedAt ? new Date(state.acceptedAt).toLocaleString() : "—"}</div>
-                      <div>Actions</div>
-                    </div>
-
-                    <div className="flex gap-2 mt-3">
-                      <button
-                        className="px-3 py-2 rounded bg-muted-700 text-gray-200 border border-muted-600 flex-1"
-                        onClick={() => handleAbandon(id)}
-                      >
-                        Abandon
-                      </button>
-                      <button
-                        className="px-3 py-2 rounded bg-indigo-900 text-indigo-100 border border-indigo-700"
-                        onClick={() => handleForceComplete(id)}
-                      >
-                        Complete
-                      </button>
+                    <div className="text-xs text-gray-300 mt-3 flex justify-between items-center">
+                      <div className="truncate">Accepted: {state.acceptedAt ? new Date(state.acceptedAt).toLocaleString() : "—"}</div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          className="px-3 py-1 rounded bg-muted-700 text-gray-200 border border-muted-600 text-xs"
+                          onClick={() => handleAbandon(id)}
+                          title="Abandon quest"
+                        >
+                          <XCircle className="w-4 h-4 inline-block mr-1" />
+                          Abandon
+                        </button>
+                        <button
+                          className="px-3 py-1 rounded bg-indigo-900 text-indigo-100 border border-indigo-700 text-xs"
+                          onClick={() => handleForceComplete(id)}
+                          title="Force complete"
+                        >
+                          <CheckCircle className="w-4 h-4 inline-block mr-1" />
+                          Complete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -224,7 +256,13 @@ export default function QuestBoard() {
 
         {/* Completed */}
         <div className="rounded-lg fantasy-border bg-panel-800 p-3">
-          <h3 className="text-md font-semibold text-gray-100 mb-3">Completed</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-md font-semibold text-gray-100 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-emerald-300" />
+              Completed
+            </h3>
+            <div className="text-xs text-gray-400">{playerQuests.completed.length} finished</div>
+          </div>
 
           {playerQuests.completed.length === 0 ? (
             <div className="text-gray-500 text-sm">No completed quests.</div>
@@ -234,15 +272,17 @@ export default function QuestBoard() {
                 const qDef = getQuestDef(qid);
                 return (
                   <div key={qid} className="p-3 rounded-lg bg-[#0f1720] border border-[#1f2937]">
-                    <div className="font-semibold text-gray-100">{qDef?.title ?? qid}</div>
-                    <div className="text-xs text-gray-400 mt-1">{qDef?.desc ?? ""}</div>
-                    <div className="text-xs text-gray-300 mt-2">Rewards: {renderRewards(qDef?.rewards)}</div>
+                    <div className="font-semibold text-gray-100 truncate">{qDef?.title ?? qid}</div>
+                    <div className="text-xs text-gray-400 mt-1 truncate">{qDef?.desc ?? ""}</div>
+                    <div className="text-xs text-gray-300 mt-2 truncate">Rewards: {renderRewards(qDef?.rewards)}</div>
 
                     <div className="flex mt-3">
                       <button
-                        className="px-3 py-2 rounded bg-muted-700 text-gray-200 border border-muted-600"
+                        className="px-3 py-2 rounded bg-muted-700 text-gray-200 border border-muted-600 text-sm"
                         onClick={() => alert(JSON.stringify(qDef, null, 2))}
+                        title="View quest definition"
                       >
+                        <Gift className="w-4 h-4 inline-block mr-2" />
                         View
                       </button>
                     </div>
